@@ -25,12 +25,10 @@ export function CustomCursor() {
 
   const [cursorVariant, setCursorVariant] = useState<CursorVariant>("default");
   const [isVisible, setIsVisible] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
     const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
     const canUseCursor = !coarsePointer && !prefersReducedMotion;
-    setIsEnabled(canUseCursor);
 
     if (!canUseCursor) {
       delete document.documentElement.dataset.customCursor;
@@ -68,7 +66,7 @@ export function CustomCursor() {
     };
   }, [prefersReducedMotion, rawX, rawY]);
 
-  if (!isEnabled || !isVisible) return null;
+  if (!isVisible || prefersReducedMotion) return null;
 
   const isExpanded = cursorVariant !== "default";
   const cursorText =
