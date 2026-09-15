@@ -32,7 +32,12 @@ export function CustomCursor() {
     const canUseCursor = !coarsePointer && !prefersReducedMotion;
     setIsEnabled(canUseCursor);
 
-    if (!canUseCursor) return;
+    if (!canUseCursor) {
+      delete document.documentElement.dataset.customCursor;
+      return;
+    }
+
+    document.documentElement.dataset.customCursor = "enabled";
 
     const resolveVariant = (target: EventTarget | null): CursorVariant => {
       if (!(target instanceof HTMLElement)) return "default";
@@ -56,6 +61,7 @@ export function CustomCursor() {
     document.documentElement.addEventListener("mouseenter", handlePointerEnter);
 
     return () => {
+      delete document.documentElement.dataset.customCursor;
       window.removeEventListener("pointermove", handlePointerMove);
       document.documentElement.removeEventListener("mouseleave", handlePointerLeave);
       document.documentElement.removeEventListener("mouseenter", handlePointerEnter);
@@ -75,7 +81,7 @@ export function CustomCursor() {
   return (
     <motion.div
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[60]"
+      className="pointer-events-none fixed left-0 top-0 z-[90]"
       style={{ x, y }}
     >
       <motion.div
