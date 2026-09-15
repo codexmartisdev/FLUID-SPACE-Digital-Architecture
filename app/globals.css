@@ -1,22 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "../themes/lar/theme.css";
 
 @layer base {
-  :root {
-    --bg-site: #faf9f7;
-    --bg-mineral: #f8f8f7;
-    --bg-cream: #f4f3f0;
-    --bg-dark: #111215;
-    --text-primary: #191a1d;
-    --text-muted: #6b6f76;
-    --border-subtle: rgba(0, 0, 0, 0.08);
-    --focus-ring: rgba(25, 26, 29, 0.88);
-  }
-
   html {
     scroll-behavior: smooth;
-    background-color: var(--bg-site);
-    color: var(--text-primary);
+    background-color: var(--lar-color-bg-site);
+    color: var(--lar-color-text-primary);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -24,16 +14,16 @@
   }
 
   body {
-    background-color: var(--bg-site);
+    background-color: var(--lar-color-bg-site);
   }
 
   ::selection {
-    background-color: #1c1d21;
-    color: #f5f5f3;
+    background-color: var(--lar-color-selection-bg);
+    color: var(--lar-color-selection-text);
   }
 
   :focus-visible {
-    outline-color: var(--focus-ring);
+    outline-color: var(--lar-color-focus-ring);
     outline-offset: 3px;
   }
 }
@@ -53,13 +43,13 @@
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    rgba(250, 249, 247, 1) 0%,
-    rgba(250, 249, 247, 0.985) 24%,
-    rgba(250, 249, 247, 0.91) 39%,
-    rgba(250, 249, 247, 0.64) 52%,
-    rgba(250, 249, 247, 0.2) 66%,
-    rgba(250, 249, 247, 0.035) 79%,
-    rgba(250, 249, 247, 0) 90%
+    rgba(var(--lar-hero-surface-rgb), 1) 0%,
+    rgba(var(--lar-hero-surface-rgb), 0.985) 24%,
+    rgba(var(--lar-hero-surface-rgb), 0.91) 39%,
+    rgba(var(--lar-hero-surface-rgb), 0.64) 52%,
+    rgba(var(--lar-hero-surface-rgb), 0.2) 66%,
+    rgba(var(--lar-hero-surface-rgb), 0.035) 79%,
+    rgba(var(--lar-hero-surface-rgb), 0) 90%
   );
 }
 
@@ -71,7 +61,7 @@
   #blog-hero,
   #contato-hero
 ) > div.absolute img {
-  filter: saturate(0.93) contrast(1.025);
+  filter: saturate(var(--lar-image-saturation)) contrast(var(--lar-image-contrast));
 }
 
 :is(
@@ -120,7 +110,7 @@
 }
 
 section[id] {
-  scroll-margin-top: 92px;
+  scroll-margin-top: var(--lar-header-offset);
 }
 
 h1,
@@ -163,18 +153,18 @@ html[data-custom-cursor="enabled"] select {
     background:
       linear-gradient(
         180deg,
-        rgba(250, 249, 247, 0.74) 0%,
-        rgba(250, 249, 247, 0.84) 22%,
-        rgba(250, 249, 247, 0.94) 44%,
-        rgba(250, 249, 247, 0.988) 63%,
-        #faf9f7 79%,
-        #faf9f7 100%
+        rgba(var(--lar-hero-surface-rgb), 0.74) 0%,
+        rgba(var(--lar-hero-surface-rgb), 0.84) 22%,
+        rgba(var(--lar-hero-surface-rgb), 0.94) 44%,
+        rgba(var(--lar-hero-surface-rgb), 0.988) 63%,
+        var(--lar-color-bg-site) 79%,
+        var(--lar-color-bg-site) 100%
       ),
       linear-gradient(
         90deg,
-        rgba(250, 249, 247, 0.9) 0%,
-        rgba(250, 249, 247, 0.7) 58%,
-        rgba(250, 249, 247, 0.32) 100%
+        rgba(var(--lar-hero-surface-rgb), 0.9) 0%,
+        rgba(var(--lar-hero-surface-rgb), 0.7) 58%,
+        rgba(var(--lar-hero-surface-rgb), 0.32) 100%
       );
   }
 
@@ -186,7 +176,7 @@ html[data-custom-cursor="enabled"] select {
     #blog-hero,
     #contato-hero
   ) > div.absolute img {
-    filter: saturate(0.9) contrast(1.02);
+    filter: saturate(var(--lar-image-saturation-mobile)) contrast(var(--lar-image-contrast-mobile));
   }
 }
 
@@ -196,16 +186,16 @@ html[data-custom-cursor="enabled"] select {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f0ec;
+  background: var(--lar-color-scroll-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c7c5be;
+  background: var(--lar-color-scroll-thumb);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9e9c94;
+  background: var(--lar-color-scroll-thumb-hover);
 }
 
 @media (prefers-reduced-motion: reduce) {
