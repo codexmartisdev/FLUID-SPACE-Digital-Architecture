@@ -1,0 +1,6 @@
+{
+  "name": "Mick Ramos Arquitetura",
+  "description": "Website oficial de Mick Ramos — Arquitetura, Interiores e Design contemporâneo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
