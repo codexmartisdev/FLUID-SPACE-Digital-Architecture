@@ -14,20 +14,20 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Mick Ramos Arquitetura — Arquitetura · Interiores · Design",
+  title: "LaR Arquitetura e Interiores",
   description:
-    "Website oficial de Mick Ramos. Projetos que unem função, emoção e movimento. Espaços não são ocupados, são experimentados.",
+    "LaR Arquitetura e Interiores. Projetos que unem função, emoção e movimento. Espaços não são ocupados, são experimentados.",
   openGraph: {
-    title: "Mick Ramos Arquitetura — Arquitetura · Interiores · Design",
+    title: "LaR Arquitetura e Interiores",
     description:
-      "Website oficial de Mick Ramos. Projetos que unem função, emoção e movimento. Espaços não são ocupados, são experimentados.",
+      "Projetos de arquitetura e interiores que unem função, emoção e movimento.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mick Ramos Arquitetura — Arquitetura · Interiores · Design",
+    title: "LaR Arquitetura e Interiores",
     description:
-      "Website oficial de Mick Ramos. Projetos que unem função, emoção e movimento. Espaços não são ocupados, são experimentados.",
+      "Projetos de arquitetura e interiores que unem função, emoção e movimento.",
   },
 };
 
