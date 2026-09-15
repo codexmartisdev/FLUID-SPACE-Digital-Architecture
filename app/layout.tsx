@@ -37,8 +37,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={jakarta.variable}>
-      <body className="font-sans antialiased bg-[#faf9f7] text-[#191a1d] min-h-screen flex flex-col selection:bg-black selection:text-white" suppressHydrationWarning>
+    <html lang="pt-BR" className={jakarta.variable} data-theme="lar">
+      <body
+        className="font-sans antialiased min-h-screen flex flex-col"
+        suppressHydrationWarning
+      >
         <CustomCursor />
         <Header />
         <main className="flex-1 w-full overflow-x-clip">
