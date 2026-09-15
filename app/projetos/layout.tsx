@@ -6,6 +6,7 @@ export const metadata = createPageMetadata({
   description:
     "Portfólio da LaR Arquitetura e Interiores. Arquitetura e interiores com foco em estética, funcionalidade, contexto e experiência.",
   path: "/projetos",
+  noIndex: true,
 });
 
 export default function ProjetosLayout({ children }: { children: ReactNode }) {
