@@ -53,19 +53,33 @@ export function Footer() {
             </p>
             <div className="space-y-2 text-sm text-neutral-600">
               <p>{siteConfig.city}</p>
+
+              {siteConfig.phones.map((contact) => (
+                <a
+                  key={contact.tel}
+                  href={`tel:${contact.tel}`}
+                  className="block w-fit transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                >
+                  {contact.display}
+                </a>
+              ))}
+
+              {siteConfig.email && (
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  className="block w-fit transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                >
+                  {siteConfig.email}
+                </a>
+              )}
+
               <a
-                href={`mailto:${siteConfig.email}`}
-                className="block w-fit transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
-              >
-                {siteConfig.email}
-              </a>
-              <a
-                href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`}
+                href={siteConfig.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-fit transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
               >
-                {siteConfig.phone}
+                {siteConfig.instagram}
               </a>
             </div>
           </div>
