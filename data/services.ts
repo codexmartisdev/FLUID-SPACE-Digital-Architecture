@@ -130,7 +130,7 @@ export const deliverablesData: DeliverableItem[] = [
     title: "Suporte em Obra",
     description: "Acompanhamento e orientação durante a execução.",
     image:
-      "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
