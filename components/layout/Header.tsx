@@ -14,8 +14,9 @@ export function Header() {
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileMenuPath, setMobileMenuPath] = useState<string | null>(null);
 
+  const isMobileMenuOpen = mobileMenuPath === pathname;
   const isProjectDetail = pathname.startsWith("/projetos/") && pathname !== "/projetos";
   const useLightHeader = isProjectDetail && !isScrolled && !isMobileMenuOpen;
 
@@ -27,15 +28,17 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuPath((openPath) => (openPath === pathname ? null : pathname));
+  };
+
+  const closeMobileMenu = () => setMobileMenuPath(null);
 
   return (
     <>
@@ -58,6 +61,7 @@ export function Header() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 md:px-12">
           <Link
             href="/"
+            onClick={closeMobileMenu}
             aria-label="LaR Arquitetura e Interiores - Início"
             className={`group rounded-sm transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-current ${
               useLightHeader ? "text-white" : "text-[#191a1d]"
@@ -108,7 +112,7 @@ export function Header() {
           <button
             id="mobile-menu-toggle"
             type="button"
-            onClick={() => setIsMobileMenuOpen((open) => !open)}
+            onClick={toggleMobileMenu}
             className={`relative z-[80] flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-current md:hidden ${
               useLightHeader
                 ? "border-white/25 bg-black/10 text-white hover:bg-black/20"
@@ -186,6 +190,7 @@ export function Header() {
                   >
                     <Link
                       href={link.href}
+                      onClick={closeMobileMenu}
                       className="group grid grid-cols-[42px_1fr_auto] items-center border-b border-black/[0.075] py-4"
                     >
                       <span className="font-mono text-[10px] tracking-[0.18em] text-neutral-400">
