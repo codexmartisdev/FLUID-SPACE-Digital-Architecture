@@ -82,19 +82,15 @@ export function CustomCursor() {
     <motion.div
       aria-hidden="true"
       className="pointer-events-none fixed left-0 top-0 z-[90]"
-      style={{ x, y }}
+      style={{ x, y, mixBlendMode: "difference" }}
     >
       <motion.div
-        className="flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-mono text-[10px] uppercase tracking-widest text-white"
+        className="flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-white font-mono text-[10px] uppercase tracking-widest text-white"
         animate={{
           width: isExpanded ? 78 : 11,
           height: isExpanded ? 78 : 11,
-          backgroundColor: isExpanded
-            ? "rgba(18, 19, 22, 0.90)"
-            : "rgba(20, 21, 25, 0.72)",
-          boxShadow: isExpanded
-            ? "0 10px 32px rgba(0,0,0,0.16)"
-            : "0 3px 12px rgba(0,0,0,0.10)",
+          backgroundColor: isExpanded ? "rgba(255,255,255,0)" : "#ffffff",
+          borderWidth: isExpanded ? 1 : 0,
         }}
         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
       >
