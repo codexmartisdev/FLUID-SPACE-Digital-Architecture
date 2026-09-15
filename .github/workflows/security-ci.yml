@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Typecheck, build, audit and lint
+    name: Typecheck, build, headers, audit and lint
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -51,6 +51,53 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Security headers smoke test
+        shell: bash
+        run: |
+          npm run start -- -p 3010 -H 127.0.0.1 > /tmp/lar-security-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+
+          READY=0
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:3010/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/lar-security-server.log || true
+            echo '::error::Production server did not become ready for the header smoke test.'
+            exit 1
+          fi
+
+          HEADERS="$(curl -fsS -D - -o /dev/null http://127.0.0.1:3010/ | tr -d '\r')"
+          printf '%s\n' "$HEADERS"
+
+          require_header() {
+            local pattern="$1"
+            local label="$2"
+            if ! printf '%s\n' "$HEADERS" | grep -Eiq "$pattern"; then
+              echo "::error::Missing or invalid ${label}."
+              exit 1
+            fi
+          }
+
+          require_header '^content-security-policy: .*frame-ancestors '\''none'\''' 'Content-Security-Policy frame protection'
+          require_header '^content-security-policy: .*object-src '\''none'\''' 'Content-Security-Policy object protection'
+          require_header '^x-content-type-options: nosniff$' 'X-Content-Type-Options'
+          require_header '^x-frame-options: DENY$' 'X-Frame-Options'
+          require_header '^referrer-policy: strict-origin-when-cross-origin$' 'Referrer-Policy'
+          require_header '^permissions-policy: .*camera=\(\).*microphone=\(\).*geolocation=\(\)' 'Permissions-Policy'
+          require_header '^strict-transport-security: max-age=63072000; includeSubDomains; preload$' 'Strict-Transport-Security'
+
+          if printf '%s\n' "$HEADERS" | grep -Eiq '^x-powered-by:'; then
+            echo '::error::X-Powered-By must remain disabled.'
+            exit 1
+          fi
 
       - name: Dependency audit
         run: npm audit --audit-level=high
