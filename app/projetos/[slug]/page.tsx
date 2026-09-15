@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, MapPin, Calendar, Layers, Maximize } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { projects } from "@/data/projects";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { ProjectGallery } from "@/components/projects/ProjectGallery";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -161,29 +162,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               02 / REGISTROS VISUAIS
             </span>
             <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500">
-              {project.gallery.length} fotografias
+              {project.gallery.length} fotografias · clique para ampliar
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {project.gallery.map((img, idx) => (
-              <div
-                key={idx}
-                data-cursor="image"
-                className={`relative overflow-hidden rounded-2xl bg-neutral-200 shadow-xs ${
-                  idx === 0 ? "md:col-span-2 aspect-[16/9]" : "aspect-[4/3]"
-                }`}
-              >
-                <Image
-                  src={img}
-                  alt={`${project.title} - Vista ${idx + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover hover:scale-102 transition-transform duration-700"
-                />
-              </div>
-            ))}
-          </div>
+          <ProjectGallery images={project.gallery} title={project.title} />
         </div>
       </section>
 
