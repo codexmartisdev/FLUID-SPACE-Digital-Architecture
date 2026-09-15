@@ -1,0 +1,6 @@
+/*
+ * LaR semantic theme boundary.
+ *
+ * Intentionally not imported during G2 so the current visual output remains
+ * unchanged. G4 will migrate semantic design tokens from app/globals.css here.
+ */
