@@ -30,7 +30,6 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
   return (
     <div className="w-full">
-      {/* Monumental Hero */}
       <section className="relative min-h-[85vh] pt-32 pb-16 md:pt-40 md:pb-24 flex flex-col justify-between overflow-hidden bg-neutral-950 text-white">
         <div className="absolute inset-0 z-0">
           <Image
@@ -69,7 +68,6 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             )}
           </div>
 
-          {/* Project Technical Meta Strip */}
           <div className="pt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 border-t border-white/20 mt-12 text-xs font-mono">
             <div>
               <span className="text-neutral-400 uppercase tracking-widest text-[10px] block mb-1">
@@ -93,13 +91,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               <span className="text-neutral-400 uppercase tracking-widest text-[10px] block mb-1">
                 Fotografia
               </span>
-              <span className="text-sm text-white font-medium">Acervo Mick Ramos</span>
+              <span className="text-sm text-white font-medium">Acervo LaR</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Narrative & Concept Section */}
       <section className="py-20 md:py-28 bg-[#faf9f7] border-b border-black/5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
@@ -154,7 +151,6 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      {/* Gallery Section */}
       <section className="py-20 md:py-28 bg-[#faf9f7]">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex items-center justify-between mb-12">
@@ -170,7 +166,6 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      {/* Materiality Palette */}
       <section className="py-20 md:py-28 bg-[#111215] text-white border-t border-neutral-800">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-baseline mb-16">
@@ -207,7 +202,6 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      {/* Project Navigation (Previous / Next) */}
       <section className="py-12 bg-[#faf9f7] border-t border-black/10">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -246,7 +240,6 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      {/* Contact CTA */}
       <ContactCTA
         sectionNumber="04"
         title="Deseja conceber um projeto com essa essência?"
