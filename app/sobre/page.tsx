@@ -1,6 +1,14 @@
 import Image from "next/image";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+
+const foundersPhotoBase64 = readFileSync(
+  path.join(process.cwd(), "public/images/about/lar-founders-data.txt"),
+  "utf8",
+).trim();
+const foundersPhotoSrc = `data:image/jpeg;base64,${foundersPhotoBase64}`;
 
 const principles = [
   {
@@ -165,9 +173,10 @@ export default function SobrePage() {
             <figure className="flex flex-col lg:col-span-4">
               <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-black/[0.06] bg-neutral-200 shadow-[0_18px_50px_rgba(17,18,21,0.08)]">
                 <Image
-                  src="/images/about/lar-founders.png"
+                  src={foundersPhotoSrc}
                   alt="Laise Brito à esquerda e Rita Fontenele à direita, fundadoras da LaR Arquitetura e Interiores"
                   fill
+                  unoptimized
                   sizes="(max-width: 1024px) 100vw, 33vw"
                   className="object-cover object-center"
                 />
