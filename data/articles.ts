@@ -48,7 +48,7 @@ export const articles: Article[] = [
     cover:
       "https://images.unsplash.com/photo-1599809275671-b5942cabc7a2?auto=format&fit=crop&w=1200&q=80",
     content: [
-      "A escolha dos materiais define a alma táctil de qualquer projeto. Muito além da estética momentânea de catálogos ou modismos efêmeros, os materiais nobres selecionados por Mick Ramos envelhecem com graça e contam histórias.",
+      "A escolha dos materiais define a alma táctil de qualquer projeto. Muito além da estética momentânea de catálogos ou modismos efêmeros, os materiais nobres selecionados pela LaR envelhecem com graça e contam histórias.",
       "Pedras com corte e acabamento escovado, madeiras de manejo sustentável com veios contínuos, concreto com dosagem personalizada e metais acetinados dialogam harmoniosamente sem competir entre si.",
     ],
   },
