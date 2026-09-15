@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Mail, Phone, MapPin, Instagram, Linkedin, Clock, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Phone, MapPin, Instagram, ArrowRight, CheckCircle2 } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { FAQAccordion } from "@/components/sections/FAQAccordion";
@@ -25,7 +25,6 @@ export default function ContatoPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate real client submission with smooth delay
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
@@ -61,9 +60,6 @@ export default function ContatoPage() {
 
   return (
     <div className="w-full">
-      {/* =========================================================================
-          HERO SECTION (6. Contato.png)
-      ========================================================================= */}
       <section
         id="contato-hero"
         className="relative min-h-[90vh] pt-32 pb-16 md:pt-40 md:pb-24 flex flex-col justify-between overflow-hidden bg-[#faf9f7]"
@@ -107,7 +103,7 @@ export default function ContatoPage() {
                 &ldquo;Boas ideias nascem do diálogo e se transformam em lugares reais.&rdquo;
               </p>
               <span className="block text-[10px] font-mono tracking-widest uppercase text-neutral-400 mt-1">
-                Mick Ramos
+                LaR
               </span>
             </div>
           </div>
@@ -123,9 +119,6 @@ export default function ContatoPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          01 — CONEXÃO (6. Contato.png)
-      ========================================================================= */}
       <section id="contato-conexao" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -169,13 +162,9 @@ export default function ContatoPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          02 — FALE COM O ESTÚDIO (FORM & DIRECT INFO) (6. Contato.png)
-      ========================================================================= */}
       <section id="contato-formulario-section" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-            {/* Left: Contact Info & Studio details */}
             <div className="lg:col-span-5 space-y-8">
               <div className="flex items-baseline gap-2">
                 <span className="font-mono text-xs tracking-widest text-neutral-400">02</span>
@@ -194,23 +183,16 @@ export default function ContatoPage() {
               </div>
 
               <div className="space-y-4 pt-4 border-t border-black/10 text-xs sm:text-sm text-neutral-700">
-                <a
-                  href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 hover:text-black transition-colors"
-                >
-                  <Phone className="w-4 h-4 text-neutral-400 shrink-0" />
-                  <span>{siteConfig.phone}</span>
-                </a>
-
-                <a
-                  href={`mailto:${siteConfig.email}`}
-                  className="flex items-center gap-3 hover:text-black transition-colors"
-                >
-                  <Mail className="w-4 h-4 text-neutral-400 shrink-0" />
-                  <span>{siteConfig.email}</span>
-                </a>
+                {siteConfig.phones.map((contact) => (
+                  <a
+                    key={contact.tel}
+                    href={`tel:${contact.tel}`}
+                    className="flex items-center gap-3 hover:text-black transition-colors"
+                  >
+                    <Phone className="w-4 h-4 text-neutral-400 shrink-0" />
+                    <span>{contact.display}</span>
+                  </a>
+                ))}
 
                 <div className="flex items-center gap-3">
                   <MapPin className="w-4 h-4 text-neutral-400 shrink-0" />
@@ -218,7 +200,7 @@ export default function ContatoPage() {
                 </div>
 
                 <a
-                  href="https://instagram.com"
+                  href={siteConfig.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 hover:text-black transition-colors"
@@ -226,25 +208,9 @@ export default function ContatoPage() {
                   <Instagram className="w-4 h-4 text-neutral-400 shrink-0" />
                   <span>{siteConfig.instagram}</span>
                 </a>
-
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 hover:text-black transition-colors"
-                >
-                  <Linkedin className="w-4 h-4 text-neutral-400 shrink-0" />
-                  <span>{siteConfig.linkedin}</span>
-                </a>
-
-                <div className="flex items-start gap-3 pt-4 border-t border-black/5 text-xs text-neutral-500 font-light">
-                  <Clock className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5" />
-                  <span>{siteConfig.hours}</span>
-                </div>
               </div>
             </div>
 
-            {/* Right: Interactive Contact Form */}
             <div className="lg:col-span-7 bg-white p-8 md:p-12 rounded-3xl border border-black/10 shadow-xs">
               {submitted ? (
                 <div className="py-12 flex flex-col items-center text-center space-y-4">
@@ -255,7 +221,7 @@ export default function ContatoPage() {
                     Mensagem recebida com sucesso!
                   </h3>
                   <p className="text-sm text-neutral-600 font-light max-w-md leading-relaxed">
-                    Obrigado por compartilhar suas ideias com o escritório Mick Ramos. Retornaremos o seu contato em até 1 dia útil.
+                    Obrigado por compartilhar suas ideias com a LaR Arquitetura e Interiores. Retornaremos assim que possível.
                   </p>
                   <button
                     type="button"
@@ -278,7 +244,6 @@ export default function ContatoPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Row 1: Nome & Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="nome" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
@@ -311,7 +276,6 @@ export default function ContatoPage() {
                     </div>
                   </div>
 
-                  {/* Row 2: WhatsApp & Cidade */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="whatsapp" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
@@ -323,7 +287,7 @@ export default function ContatoPage() {
                         required
                         value={formData.whatsapp}
                         onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                        placeholder="(11) 98765-4321"
+                        placeholder="(86) 9XXXX-XXXX"
                         className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
                       />
                     </div>
@@ -343,7 +307,6 @@ export default function ContatoPage() {
                     </div>
                   </div>
 
-                  {/* Row 3: Tipo de projeto & Área aproximada */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="tipoProjeto" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
@@ -380,7 +343,6 @@ export default function ContatoPage() {
                     </div>
                   </div>
 
-                  {/* Row 4: Mensagem */}
                   <div>
                     <label htmlFor="mensagem" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
                       Mensagem
@@ -396,7 +358,6 @@ export default function ContatoPage() {
                     />
                   </div>
 
-                  {/* Submit CTA */}
                   <div>
                     <button
                       type="submit"
@@ -414,9 +375,6 @@ export default function ContatoPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          03 — COMO ACONTECE (6. Contato.png)
-      ========================================================================= */}
       <ProcessTimeline
         sectionNumber="03"
         sectionTag="COMO ACONTECE"
@@ -446,9 +404,6 @@ export default function ContatoPage() {
         ]}
       />
 
-      {/* =========================================================================
-          04 — DÚVIDAS FREQUENTES / FAQ (6. Contato.png)
-      ========================================================================= */}
       <FAQAccordion
         sectionNumber="04"
         sectionTag="DÚVIDAS FREQUENTES"
@@ -456,12 +411,8 @@ export default function ContatoPage() {
         leftNote="RESPOSTAS PARA VOCÊ COMEÇAR COM MAIS SEGURANÇA"
       />
 
-      {/* =========================================================================
-          05 — ATUAÇÃO (6. Contato.png)
-      ========================================================================= */}
       <section id="contato-atuacao" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          {/* Header */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-baseline mb-16">
             <div className="lg:col-span-2 flex items-baseline gap-2">
               <span className="font-mono text-xs tracking-widest text-neutral-400">05</span>
@@ -484,7 +435,6 @@ export default function ContatoPage() {
             </div>
           </div>
 
-          {/* 4 Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {atuacaoCards.map((c) => (
               <div
@@ -510,9 +460,6 @@ export default function ContatoPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          06 — COMECE AQUI / CONTATO CTA (6. Contato.png)
-      ========================================================================= */}
       <ContactCTA
         sectionNumber="06"
         title="Vamos transformar sua ideia em espaço real?"
