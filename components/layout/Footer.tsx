@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { navLinks, siteConfig } from "@/config/site";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export function Footer() {
   return (
@@ -13,19 +14,14 @@ export function Footer() {
           <div className="lg:col-span-5">
             <Link
               href="/"
-              className="group inline-flex items-baseline gap-3.5 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+              aria-label="LaR Arquitetura e Interiores - Início"
+              className="inline-flex rounded-sm text-[#191a1d] focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
             >
-              <span className="font-serif text-4xl font-light tracking-tighter text-black md:text-5xl">
-                MR
-              </span>
-              <span className="flex flex-col border-l border-black/20 pl-3.5">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-900 md:text-sm">
-                  Mick Ramos
-                </span>
-                <span className="text-[9px] font-medium uppercase tracking-[0.25em] text-neutral-500 md:text-[10px]">
-                  Arquitetura · Interiores · Design
-                </span>
-              </span>
+              <BrandLogo
+                symbolClassName="h-14 w-14 md:h-16 md:w-16"
+                nameClassName="text-2xl md:text-3xl"
+                subtitleClassName="text-[9px] md:text-[10px]"
+              />
             </Link>
 
             <p className="mt-7 max-w-md text-sm font-light leading-relaxed text-neutral-600 md:text-base">
@@ -76,7 +72,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-4 pt-7 text-[10px] uppercase tracking-[0.12em] text-neutral-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Mick Ramos. Todos os direitos reservados.</p>
+          <p>© {new Date().getFullYear()} LaR Arquitetura e Interiores. Todos os direitos reservados.</p>
           <p className="font-mono tracking-[0.16em]">Arquitetura em movimento.</p>
         </div>
       </div>
