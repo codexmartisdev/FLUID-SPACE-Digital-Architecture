@@ -43,8 +43,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
   useEffect(() => {
     if (!isOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("overflow-hidden");
     const animationFrame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
 
     const focusableSelector =
@@ -83,7 +82,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
     return () => {
       window.cancelAnimationFrame(animationFrame);
       window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = previousOverflow;
+      document.body.classList.remove("overflow-hidden");
       window.requestAnimationFrame(() => openerRef.current?.focus());
     };
   }, [close, isOpen, next, previous]);
