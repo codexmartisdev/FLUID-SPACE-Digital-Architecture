@@ -15,14 +15,22 @@ export function MotionShell({ children }: MotionShellProps) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="sync" initial={false}>
         <motion.div
           key={pathname}
-          initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -6 }}
+          initial={
+            prefersReducedMotion
+              ? { opacity: 1 }
+              : { opacity: 0, y: 7, filter: "blur(2px)" }
+          }
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={
+            prefersReducedMotion
+              ? { opacity: 1 }
+              : { opacity: 0, y: -4, filter: "blur(1px)" }
+          }
           transition={{
-            duration: prefersReducedMotion ? 0 : 0.42,
+            duration: prefersReducedMotion ? 0 : 0.34,
             ease: fluidEase,
           }}
           className="w-full"
