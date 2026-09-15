@@ -53,8 +53,9 @@ const createNextConfig = (phase: string): NextConfig => {
     typescript: {
       ignoreBuildErrors: false,
     },
-    // Allow access to remote image placeholders and curated photography.
     images: {
+      formats: ['image/avif', 'image/webp'],
+      minimumCacheTTL: 86400,
       remotePatterns: [
         {
           protocol: 'https',
