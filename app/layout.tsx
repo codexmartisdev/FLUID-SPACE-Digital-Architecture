@@ -16,18 +16,18 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "LaR Arquitetura e Interiores",
   description:
-    "LaR Arquitetura e Interiores. Projetos que unem função, emoção e movimento. Espaços não são ocupados, são experimentados.",
+    "LaR Arquitetura e Interiores, com atuação em Parnaíba - PI e Luiz Correia - PI. Projetos que unem função, emoção e movimento.",
   openGraph: {
     title: "LaR Arquitetura e Interiores",
     description:
-      "Projetos de arquitetura e interiores que unem função, emoção e movimento.",
+      "Arquitetura e interiores em Parnaíba - PI e Luiz Correia - PI, com projetos que unem função, emoção e movimento.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "LaR Arquitetura e Interiores",
     description:
-      "Projetos de arquitetura e interiores que unem função, emoção e movimento.",
+      "Arquitetura e interiores em Parnaíba - PI e Luiz Correia - PI.",
   },
 };
 
