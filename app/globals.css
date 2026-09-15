@@ -26,6 +26,99 @@
   }
 }
 
+/* Hero readability layer
+   Keeps the photography visible while guaranteeing a calm, high-contrast
+   reading zone wherever the main page copy overlaps the hero imagery. */
+:is(
+  #hero-section,
+  #sobre-hero,
+  #servicos-hero,
+  #projetos-hero,
+  #blog-hero,
+  #contato-hero
+)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(250, 249, 247, 0.995) 0%,
+    rgba(250, 249, 247, 0.98) 25%,
+    rgba(250, 249, 247, 0.9) 40%,
+    rgba(250, 249, 247, 0.64) 53%,
+    rgba(250, 249, 247, 0.22) 66%,
+    rgba(250, 249, 247, 0.04) 79%,
+    rgba(250, 249, 247, 0) 90%
+  );
+}
+
+:is(
+  #hero-section,
+  #sobre-hero,
+  #servicos-hero,
+  #projetos-hero,
+  #blog-hero,
+  #contato-hero
+) h1 {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5),
+    0 10px 28px rgba(250, 249, 247, 0.18);
+}
+
+:is(
+  #hero-section,
+  #sobre-hero,
+  #servicos-hero,
+  #projetos-hero,
+  #blog-hero,
+  #contato-hero
+) p {
+  text-shadow: 0 1px 10px rgba(250, 249, 247, 0.2);
+}
+
+@media (max-width: 1023px) {
+  :is(
+    #hero-section,
+    #sobre-hero,
+    #servicos-hero,
+    #projetos-hero,
+    #blog-hero,
+    #contato-hero
+  )::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(250, 249, 247, 0.76) 0%,
+        rgba(250, 249, 247, 0.86) 24%,
+        rgba(250, 249, 247, 0.94) 46%,
+        rgba(250, 249, 247, 0.985) 63%,
+        #faf9f7 78%,
+        #faf9f7 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(250, 249, 247, 0.9) 0%,
+        rgba(250, 249, 247, 0.72) 58%,
+        rgba(250, 249, 247, 0.36) 100%
+      );
+  }
+
+  :is(
+    #hero-section,
+    #sobre-hero,
+    #servicos-hero,
+    #projetos-hero,
+    #blog-hero,
+    #contato-hero
+  ) h1 {
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.8),
+      0 6px 24px rgba(250, 249, 247, 0.28);
+  }
+}
+
 /* Custom subtle scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
