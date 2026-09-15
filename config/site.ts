@@ -15,9 +15,9 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Mick Ramos",
-  brand: "MICK RAMOS",
-  role: "ARQUITETURA · INTERIORES · DESIGN",
+  name: "LaR",
+  brand: "LaR Arquitetura e Interiores",
+  role: "ARQUITETURA · INTERIORES",
   tagline: "ARQUITETURA QUE MOVE",
   description:
     "Projetos autorais que unem estética, funcionalidade e contexto. Espaços não são ocupados, são experimentados.",
