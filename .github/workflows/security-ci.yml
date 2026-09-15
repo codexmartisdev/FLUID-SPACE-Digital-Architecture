@@ -1,0 +1,59 @@
+name: Security CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, build, audit and lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: High-confidence secret history scan
+        shell: bash
+        run: |
+          PATTERN='-----BEGIN (RSA |DSA |EC |OPENSSH )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|sk_live_[0-9A-Za-z]{20,}|xox[baprs]-[0-9A-Za-z-]{20,}'
+          if git log --all -p --no-ext-diff -- . | grep -Eq -- "$PATTERN"; then
+            echo '::error::Potential high-confidence secret pattern found in Git history. Rotate the credential if real, purge it from history, and re-run the workflow.'
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@1e60f620b9541d64bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: TypeScript
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+      - name: Dependency audit
+        run: npm audit --audit-level=high
+
+      - name: ESLint
+        run: npm run lint
