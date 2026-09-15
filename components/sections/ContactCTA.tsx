@@ -1,6 +1,7 @@
-import Link from "next/link";
-import { ArrowRight, Mail, Phone, Instagram, MapPin, Linkedin } from "lucide-react";
+import { Mail, Phone, Instagram, MapPin, Linkedin } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { FluidReveal } from "@/components/motion/FluidReveal";
+import { FluidLink } from "@/components/motion/FluidLink";
 
 interface ContactCTAProps {
   sectionNumber?: string;
@@ -20,16 +21,16 @@ export function ContactCTA({
   return (
     <section
       id="cta-contato-section"
-      className="relative bg-[#111215] text-white py-20 md:py-28 overflow-hidden border-t border-neutral-800"
+      className="relative overflow-hidden border-t border-neutral-800 bg-[#111215] py-20 text-white md:py-28"
     >
-      {/* Fluid architectural light sweep background effect */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
+      <div className="pointer-events-none absolute inset-0 opacity-40">
         <svg
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
           viewBox="0 0 1440 600"
           fill="none"
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <path
             d="M-100 600C300 550 550 400 700 280C880 140 1200 80 1500 0V600H-100Z"
@@ -56,56 +57,55 @@ export function ContactCTA({
         </svg>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left: Section Indicator + Headline + CTA */}
-          <div className="lg:col-span-8 flex flex-col md:flex-row gap-8 md:gap-12">
-            {/* Section Number Column */}
-            <div className="shrink-0 flex flex-col text-neutral-400">
-              <span className="font-mono text-xs tracking-widest uppercase">{sectionNumber}</span>
-              <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500 mt-1">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-44 h-[430px] w-[620px] rotate-[-9deg] rounded-[50%] border border-white/[0.045]" />
+
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12">
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="flex flex-col gap-8 lg:col-span-8 md:flex-row md:gap-12">
+            <FluidReveal className="flex shrink-0 flex-col text-neutral-400" y={16}>
+              <span className="font-mono text-xs uppercase tracking-widest">{sectionNumber}</span>
+              <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-neutral-500">
                 CONTATO
               </span>
-            </div>
+            </FluidReveal>
 
-            {/* Main CTA copy */}
             <div className="space-y-6">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-white max-w-xl leading-tight">
-                {title}
-              </h2>
-              <p className="text-sm md:text-base text-neutral-300 font-light max-w-md leading-relaxed">
-                {subtitle}
-              </p>
-              <div className="pt-3">
-                <Link
-                  href={buttonHref}
-                  className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-white text-black font-mono text-xs tracking-wider uppercase font-medium hover:bg-neutral-200 transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-black/30"
-                >
-                  <span>{buttonText}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
+              <FluidReveal>
+                <h2 className="max-w-xl text-3xl font-light leading-tight tracking-tight text-white sm:text-4xl md:text-5xl">
+                  {title}
+                </h2>
+              </FluidReveal>
+              <FluidReveal delay={0.08} y={18}>
+                <p className="max-w-md text-sm font-light leading-relaxed text-neutral-300 md:text-base">
+                  {subtitle}
+                </p>
+              </FluidReveal>
+              <FluidReveal delay={0.14} y={14} className="pt-3">
+                <FluidLink href={buttonHref} variant="light">
+                  {buttonText}
+                </FluidLink>
+              </FluidReveal>
             </div>
           </div>
 
-          {/* Right: Contact Information */}
-          <div className="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-white/10 pt-8 lg:pt-0 lg:pl-12 space-y-6">
+          <FluidReveal
+            delay={0.12}
+            y={20}
+            className="space-y-6 border-t border-white/10 pt-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0"
+          >
             <div>
-              <h3 className="text-xs md:text-sm font-semibold tracking-[0.2em] text-white uppercase">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-white md:text-sm">
                 {siteConfig.name}
               </h3>
-              <p className="text-[10px] md:text-xs font-mono tracking-[0.2em] text-neutral-400 uppercase mt-1">
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-neutral-400 md:text-xs">
                 {siteConfig.role}
               </p>
             </div>
 
-            <ul className="space-y-3.5 text-xs text-neutral-300 font-light">
+            <ul className="space-y-3.5 text-xs font-light text-neutral-300">
               <li>
-                <a
-                  href={`mailto:${siteConfig.email}`}
-                  className="flex items-center gap-3 hover:text-white transition-colors"
-                >
-                  <Mail className="w-4 h-4 text-neutral-400 shrink-0" />
+                <a href={`mailto:${siteConfig.email}`} className="group flex items-center gap-3 transition-colors hover:text-white">
+                  <Mail className="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-300 group-hover:-translate-y-0.5" />
                   <span>{siteConfig.email}</span>
                 </a>
               </li>
@@ -114,9 +114,9 @@ export function ContactCTA({
                   href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 hover:text-white transition-colors"
+                  className="group flex items-center gap-3 transition-colors hover:text-white"
                 >
-                  <Phone className="w-4 h-4 text-neutral-400 shrink-0" />
+                  <Phone className="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-300 group-hover:-translate-y-0.5" />
                   <span>{siteConfig.phone}</span>
                 </a>
               </li>
@@ -125,31 +125,29 @@ export function ContactCTA({
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 hover:text-white transition-colors"
+                  className="group flex items-center gap-3 transition-colors hover:text-white"
                 >
-                  <Instagram className="w-4 h-4 text-neutral-400 shrink-0" />
+                  <Instagram className="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-300 group-hover:-translate-y-0.5" />
                   <span>{siteConfig.instagram}</span>
                 </a>
               </li>
-              <li>
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-4 h-4 text-neutral-400 shrink-0" />
-                  <span>{siteConfig.city}</span>
-                </div>
+              <li className="flex items-center gap-3">
+                <MapPin className="h-4 w-4 shrink-0 text-neutral-400" />
+                <span>{siteConfig.city}</span>
               </li>
               <li>
                 <a
                   href="https://linkedin.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 hover:text-white transition-colors"
+                  className="group flex items-center gap-3 transition-colors hover:text-white"
                 >
-                  <Linkedin className="w-4 h-4 text-neutral-400 shrink-0" />
+                  <Linkedin className="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-300 group-hover:-translate-y-0.5" />
                   <span>{siteConfig.linkedin}</span>
                 </a>
               </li>
             </ul>
-          </div>
+          </FluidReveal>
         </div>
       </div>
     </section>
