@@ -48,4 +48,4 @@ export const navLinks = [
   { name: "Projetos", href: "/projetos" },
   { name: "Blog", href: "/blog" },
   { name: "Contato", href: "/contato" },
-] as const;
+];
