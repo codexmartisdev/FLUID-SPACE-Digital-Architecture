@@ -2,5 +2,5 @@
   "name": "LaR Arquitetura e Interiores",
   "description": "Website oficial da LaR Arquitetura e Interiores — arquitetura e interiores com atuação em Parnaíba - PI e Luiz Correia - PI.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }
