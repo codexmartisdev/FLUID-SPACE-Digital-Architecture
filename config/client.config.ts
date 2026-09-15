@@ -4,12 +4,15 @@ export interface PhoneContact {
   tel: string;
 }
 
+export type SiteThemeId = "lar";
+
 export interface SiteConfig {
   name: string;
   brand: string;
   role: string;
   tagline: string;
   description: string;
+  theme: SiteThemeId;
   email: string;
   whatsapp: string;
   phone: string;
@@ -37,6 +40,7 @@ export const siteConfig: SiteConfig = {
   tagline: "ARQUITETURA QUE MOVE",
   description:
     "Projetos autorais de arquitetura e interiores que unem estética, funcionalidade e contexto. Espaços não são ocupados, são experimentados.",
+  theme: "lar",
   email: "",
   whatsapp: "",
   phone: "(86) 9 9583-1320",
