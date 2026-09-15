@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/config/site";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 const fluidEase = [0.22, 1, 0.36, 1] as const;
 
@@ -42,8 +43,8 @@ export function Header() {
         id="global-header"
         initial={false}
         animate={{
-          paddingTop: isScrolled ? 12 : 22,
-          paddingBottom: isScrolled ? 12 : 22,
+          paddingTop: isScrolled ? 10 : 18,
+          paddingBottom: isScrolled ? 10 : 18,
           backgroundColor: isScrolled
             ? "rgba(250, 249, 247, 0.91)"
             : "rgba(250, 249, 247, 0)",
@@ -57,38 +58,16 @@ export function Header() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 md:px-12">
           <Link
             href="/"
-            aria-label="Mick Ramos Arquitetura - Início"
-            className="group flex select-none items-center gap-3.5 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-current"
+            aria-label="LaR Arquitetura e Interiores - Início"
+            className={`group rounded-sm transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+              useLightHeader ? "text-white" : "text-[#191a1d]"
+            }`}
           >
-            <motion.span
-              className={`font-serif text-3xl font-light tracking-tighter transition-colors duration-300 md:text-4xl ${
-                useLightHeader ? "text-white" : "text-black"
-              }`}
-              whileHover={prefersReducedMotion ? undefined : { x: 1, skewX: -2 }}
-              transition={{ duration: 0.3, ease: fluidEase }}
-            >
-              MR
-            </motion.span>
-            <span
-              className={`flex flex-col border-l pl-3.5 transition-colors duration-300 ${
-                useLightHeader ? "border-white/30" : "border-black/20"
-              }`}
-            >
-              <span
-                className={`text-xs font-semibold uppercase tracking-[0.2em] transition-colors duration-300 md:text-sm ${
-                  useLightHeader ? "text-white" : "text-neutral-900"
-                }`}
-              >
-                Mick Ramos
-              </span>
-              <span
-                className={`text-[9px] font-medium uppercase tracking-[0.25em] transition-colors duration-300 md:text-[10px] ${
-                  useLightHeader ? "text-white/70" : "text-neutral-500"
-                }`}
-              >
-                Arquitetura · Design
-              </span>
-            </span>
+            <BrandLogo
+              symbolClassName="h-10 w-10 md:h-12 md:w-12"
+              nameClassName="text-xl md:text-[1.65rem]"
+              subtitleClassName="text-[8px] md:text-[9px]"
+            />
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex lg:gap-10" aria-label="Navegação Principal">
@@ -199,7 +178,11 @@ export function Header() {
                     key={link.href}
                     initial={prefersReducedMotion ? false : { opacity: 0, y: 22 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.18 + index * 0.055, duration: 0.55, ease: fluidEase }}
+                    transition={{
+                      delay: prefersReducedMotion ? 0 : 0.18 + index * 0.055,
+                      duration: 0.55,
+                      ease: fluidEase,
+                    }}
                   >
                     <Link
                       href={link.href}
@@ -208,10 +191,18 @@ export function Header() {
                       <span className="font-mono text-[10px] tracking-[0.18em] text-neutral-400">
                         {String(index + 1).padStart(2, "0")}
                       </span>
-                      <span className={`text-[clamp(1.8rem,8vw,2.55rem)] font-light tracking-[-0.035em] ${isActive ? "text-black" : "text-neutral-700"}`}>
+                      <span
+                        className={`text-[clamp(1.8rem,8vw,2.55rem)] font-light tracking-[-0.035em] ${
+                          isActive ? "text-black" : "text-neutral-700"
+                        }`}
+                      >
                         {link.name}
                       </span>
-                      <ArrowUpRight className={`h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${isActive ? "text-black" : "text-neutral-400"}`} />
+                      <ArrowUpRight
+                        className={`h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
+                          isActive ? "text-black" : "text-neutral-400"
+                        }`}
+                      />
                     </Link>
                   </motion.div>
                 );
@@ -225,12 +216,16 @@ export function Header() {
               className="relative z-10 grid grid-cols-2 gap-6 border-t border-black/10 pt-6 text-[11px] text-neutral-500"
             >
               <div>
-                <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-neutral-400">Estúdio</p>
-                <p className="font-medium text-neutral-800">{siteConfig.name}</p>
+                <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-neutral-400">
+                  Estúdio
+                </p>
+                <p className="font-medium text-neutral-800">{siteConfig.brand}</p>
                 <p>{siteConfig.role}</p>
               </div>
               <div className="text-right">
-                <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-neutral-400">Contato</p>
+                <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-neutral-400">
+                  Contato
+                </p>
                 <p>{siteConfig.email}</p>
                 <p>{siteConfig.phone}</p>
               </div>
