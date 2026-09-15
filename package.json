@@ -10,7 +10,8 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "perf:budget": "node scripts/performance-budget.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
