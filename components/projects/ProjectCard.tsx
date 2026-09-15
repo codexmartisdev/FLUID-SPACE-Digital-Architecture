@@ -43,9 +43,9 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.025]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
               <div className="absolute bottom-0 left-0 right-0 translate-y-full px-5 pb-4 pt-12 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0">
-                <div className="flex items-center justify-between border-t border-white/30 pt-3 text-[10px] font-mono uppercase tracking-[0.16em] text-white">
+                <div className="flex items-center justify-between border-t border-white/40 pt-3 text-[10px] font-mono uppercase tracking-[0.16em] text-white">
                   <span>{project.category}</span>
                   <span>{project.year}</span>
                 </div>
