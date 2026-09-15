@@ -1,107 +1,108 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from "motion/react";
+
+type CursorVariant = "default" | "project" | "image";
+
+const springConfig = {
+  stiffness: 720,
+  damping: 42,
+  mass: 0.18,
+};
 
 export function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
-  const [cursorText, setCursorText] = useState("");
-  const [cursorVariant, setCursorVariant] = useState<"default" | "project" | "image" | "hidden">("default");
+  const rawX = useMotionValue(-120);
+  const rawY = useMotionValue(-120);
+  const x = useSpring(rawX, springConfig);
+  const y = useSpring(rawY, springConfig);
+  const prefersReducedMotion = useReducedMotion();
+
+  const [cursorVariant, setCursorVariant] = useState<CursorVariant>("default");
   const [isVisible, setIsVisible] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
-    // Only enable on non-touch devices and when motion is allowed
-    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    const canUseCursor = !coarsePointer && !prefersReducedMotion;
+    setIsEnabled(canUseCursor);
 
-    if (isTouch || prefersReducedMotion) {
-      return;
-    }
+    if (!canUseCursor) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const resolveVariant = (target: EventTarget | null): CursorVariant => {
+      if (!(target instanceof HTMLElement)) return "default";
+      if (target.closest("[data-cursor='project']")) return "project";
+      if (target.closest("[data-cursor='image']")) return "image";
+      return "default";
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      rawX.set(event.clientX);
+      rawY.set(event.clientY);
       setIsVisible(true);
-      setMousePosition({ x: e.clientX, y: e.clientY });
-
-      // Check target elements
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-
-      const projectEl = target.closest("[data-cursor='project']");
-      const imageEl = target.closest("[data-cursor='image']");
-      const buttonEl = target.closest("button, a, input, textarea, select");
-
-      if (projectEl) {
-        setCursorVariant("project");
-        setCursorText("VER →");
-      } else if (imageEl) {
-        setCursorVariant("image");
-        setCursorText("EXPANDIR +");
-      } else if (buttonEl) {
-        setCursorVariant("default");
-        setCursorText("");
-      } else {
-        setCursorVariant("default");
-        setCursorText("");
-      }
+      setCursorVariant(resolveVariant(event.target));
     };
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
+    const handlePointerLeave = () => setIsVisible(false);
+    const handlePointerEnter = () => setIsVisible(true);
 
-    const handleMouseEnter = () => {
-      setIsVisible(true);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseleave", handleMouseLeave);
-    document.addEventListener("mouseenter", handleMouseEnter);
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    document.documentElement.addEventListener("mouseleave", handlePointerLeave);
+    document.documentElement.addEventListener("mouseenter", handlePointerEnter);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      document.removeEventListener("mouseenter", handleMouseEnter);
+      window.removeEventListener("pointermove", handlePointerMove);
+      document.documentElement.removeEventListener("mouseleave", handlePointerLeave);
+      document.documentElement.removeEventListener("mouseenter", handlePointerEnter);
     };
-  }, []);
+  }, [prefersReducedMotion, rawX, rawY]);
 
-  if (!isVisible) return null;
+  if (!isEnabled || !isVisible) return null;
+
+  const isExpanded = cursorVariant !== "default";
+  const cursorText =
+    cursorVariant === "project"
+      ? "VER →"
+      : cursorVariant === "image"
+        ? "EXPANDIR +"
+        : "";
 
   return (
     <motion.div
-      className="pointer-events-none fixed top-0 left-0 z-50 flex items-center justify-center font-mono text-[10px] tracking-widest uppercase transition-opacity duration-300"
-      animate={{
-        x: mousePosition.x - (cursorVariant === "default" ? 6 : 40),
-        y: mousePosition.y - (cursorVariant === "default" ? 6 : 40),
-        width: cursorVariant === "default" ? 12 : 80,
-        height: cursorVariant === "default" ? 12 : 80,
-        backgroundColor:
-          cursorVariant === "default"
-            ? "rgba(20, 21, 25, 0.75)"
-            : "rgba(18, 19, 22, 0.92)",
-        color: "#ffffff",
-        backdropFilter: cursorVariant !== "default" ? "blur(4px)" : "none",
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 450,
-        damping: 32,
-        mass: 0.5,
-      }}
-      style={{
-        borderRadius: "9999px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
-      }}
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[60]"
+      style={{ x, y }}
     >
-      {cursorText && (
+      <motion.div
+        className="flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-mono text-[10px] uppercase tracking-widest text-white"
+        animate={{
+          width: isExpanded ? 78 : 11,
+          height: isExpanded ? 78 : 11,
+          backgroundColor: isExpanded
+            ? "rgba(18, 19, 22, 0.90)"
+            : "rgba(20, 21, 25, 0.72)",
+          boxShadow: isExpanded
+            ? "0 10px 32px rgba(0,0,0,0.16)"
+            : "0 3px 12px rgba(0,0,0,0.10)",
+        }}
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      >
         <motion.span
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          className="font-medium tracking-wider"
+          animate={{
+            opacity: cursorText ? 1 : 0,
+            scale: cursorText ? 1 : 0.9,
+          }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
+          className="whitespace-nowrap font-medium tracking-wider"
         >
           {cursorText}
         </motion.span>
-      )}
+      </motion.div>
     </motion.div>
   );
 }
