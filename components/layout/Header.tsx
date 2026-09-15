@@ -221,13 +221,29 @@ export function Header() {
                 </p>
                 <p className="font-medium text-neutral-800">{siteConfig.brand}</p>
                 <p>{siteConfig.role}</p>
+                <p className="mt-2 text-neutral-400">{siteConfig.city}</p>
               </div>
               <div className="text-right">
                 <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-neutral-400">
                   Contato
                 </p>
-                <p>{siteConfig.email}</p>
-                <p>{siteConfig.phone}</p>
+                {siteConfig.phones.map((contact) => (
+                  <a
+                    key={contact.tel}
+                    href={`tel:${contact.tel}`}
+                    className="block transition-colors hover:text-black"
+                  >
+                    {contact.display}
+                  </a>
+                ))}
+                <a
+                  href={siteConfig.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 block transition-colors hover:text-black"
+                >
+                  {siteConfig.instagram}
+                </a>
               </div>
             </motion.div>
           </motion.div>
