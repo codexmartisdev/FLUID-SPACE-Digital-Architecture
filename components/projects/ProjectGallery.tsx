@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
@@ -15,6 +15,9 @@ const fluidEase = [0.22, 1, 0.36, 1] as const;
 export function ProjectGallery({ images, title }: ProjectGalleryProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const prefersReducedMotion = useReducedMotion();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
 
   const isOpen = activeIndex !== null;
 
@@ -32,22 +35,55 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
     });
   }, [images.length]);
 
+  const openAt = (index: number, trigger: HTMLElement) => {
+    openerRef.current = trigger;
+    setActiveIndex(index);
+  };
+
   useEffect(() => {
     if (!isOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("overflow-hidden");
+    const animationFrame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") close();
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+        return;
+      }
       if (event.key === "ArrowLeft") previous();
       if (event.key === "ArrowRight") next();
+
+      if (event.key === "Tab" && dialogRef.current) {
+        const focusable = Array.from(
+          dialogRef.current.querySelectorAll<HTMLElement>(focusableSelector),
+        );
+        if (focusable.length === 0) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+
+        if (event.shiftKey && active === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && active === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
+      window.cancelAnimationFrame(animationFrame);
       window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = previousOverflow;
+      document.body.classList.remove("overflow-hidden");
+      window.requestAnimationFrame(() => openerRef.current?.focus());
     };
   }, [close, isOpen, next, previous]);
 
@@ -60,7 +96,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
           <button
             key={`${image}-${index}`}
             type="button"
-            onClick={() => setActiveIndex(index)}
+            onClick={(event) => openAt(index, event.currentTarget)}
             data-cursor="image"
             aria-label={`Abrir ${title} — foto ${index + 1} em tela cheia`}
             className={`group relative overflow-hidden rounded-2xl bg-neutral-200 text-left shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 ${
@@ -74,8 +110,8 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
-            <div className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full border border-white/20 bg-black/45 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.14em] text-white backdrop-blur-md transition-all duration-300 group-hover:bg-black/65">
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
+            <div aria-hidden="true" className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full border border-white/20 bg-black/45 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.14em] text-white backdrop-blur-md transition-all duration-300 group-hover:bg-black/65">
               <Maximize2 className="h-3.5 w-3.5" />
               <span>Expandir</span>
             </div>
@@ -86,10 +122,11 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
       <AnimatePresence>
         {isOpen && activeIndex !== null && (
           <motion.div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label={`Galeria em tela cheia — ${title}`}
-            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0 }}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: prefersReducedMotion ? 0.12 : 0.28, ease: fluidEase }}
@@ -101,19 +138,20 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
             <div className="relative z-20 flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-7">
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-white sm:text-base">{title}</p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400">
+                <p aria-live="polite" className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400">
                   Foto {activeIndex + 1} de {images.length}
                 </p>
               </div>
 
               <button
+                ref={closeButtonRef}
                 type="button"
                 onClick={close}
                 aria-label="Fechar galeria em tela cheia"
                 title="Fechar (Esc)"
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white transition-colors hover:bg-white/[0.14] focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
-                <X className="h-5 w-5" />
+                <X aria-hidden="true" className="h-5 w-5" />
               </button>
             </div>
 
@@ -126,7 +164,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
                   title="Foto anterior (Seta esquerda)"
                   className="absolute left-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-md transition-all hover:bg-white hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-white sm:left-7 sm:h-12 sm:w-12"
                 >
-                  <ChevronLeft className="h-6 w-6" />
+                  <ChevronLeft aria-hidden="true" className="h-6 w-6" />
                 </button>
               )}
 
@@ -159,7 +197,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
                   title="Próxima foto (Seta direita)"
                   className="absolute right-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-md transition-all hover:bg-white hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-7 sm:h-12 sm:w-12"
                 >
-                  <ChevronRight className="h-6 w-6" />
+                  <ChevronRight aria-hidden="true" className="h-6 w-6" />
                 </button>
               )}
             </div>

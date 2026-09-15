@@ -80,9 +80,19 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(rootJsonLd) }}
         />
+        <a
+          href="#conteudo-principal"
+          className="fixed left-4 top-4 z-[200] -translate-y-24 rounded-full bg-black px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform focus:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        >
+          Pular para o conteúdo principal
+        </a>
         <CustomCursor />
         <Header />
-        <main className="flex-1 w-full overflow-x-clip">
+        <main
+          id="conteudo-principal"
+          tabIndex={-1}
+          className="flex-1 w-full overflow-x-clip outline-none"
+        >
           <MotionShell>{children}</MotionShell>
         </main>
         <Footer />

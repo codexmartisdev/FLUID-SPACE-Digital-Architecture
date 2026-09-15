@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Typecheck, build, headers, audit and lint
+    name: Typecheck, build, performance, headers, audit and lint
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -53,6 +53,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Performance budget
+        run: npm run perf:budget
 
       - name: Security headers smoke test
         shell: bash
