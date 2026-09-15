@@ -1,6 +1,6 @@
 {
-  "name": "Mick Ramos Arquitetura",
-  "description": "Website oficial de Mick Ramos — Arquitetura, Interiores e Design contemporâneo.",
+  "name": "LaR Arquitetura e Interiores",
+  "description": "Website oficial da LaR Arquitetura e Interiores — arquitetura e interiores com linguagem contemporânea.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
