@@ -1,38 +1,33 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/config/site";
+
+const fluidEase = [0.22, 1, 0.36, 1] as const;
 
 export function Header() {
   const pathname = usePathname();
+  const prefersReducedMotion = useReducedMotion();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 28);
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const [prevPathname, setPrevPathname] = useState(pathname);
-  if (prevPathname !== pathname) {
-    setPrevPathname(pathname);
-    setIsMobileMenuOpen(false);
-  }
-
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -40,61 +35,65 @@ export function Header() {
 
   return (
     <>
-      <header
+      <motion.header
         id="global-header"
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? "bg-[#faf9f7]/90 backdrop-blur-md py-3.5 border-b border-black/5 shadow-xs"
-            : "bg-transparent py-6"
-        }`}
+        initial={false}
+        animate={{
+          paddingTop: isScrolled ? 12 : 22,
+          paddingBottom: isScrolled ? 12 : 22,
+          backgroundColor: isScrolled
+            ? "rgba(250, 249, 247, 0.88)"
+            : "rgba(250, 249, 247, 0)",
+          boxShadow: isScrolled
+            ? "0 1px 0 rgba(0,0,0,0.055), 0 12px 40px rgba(18,19,22,0.035)"
+            : "0 0 0 rgba(0,0,0,0)",
+        }}
+        transition={{ duration: 0.42, ease: fluidEase }}
+        className="fixed inset-x-0 top-0 z-50 border-b border-transparent backdrop-blur-[14px]"
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Brand Logo */}
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 md:px-12">
           <Link
             href="/"
-            className="group flex items-center gap-3.5 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
             aria-label="Mick Ramos Arquitetura - Início"
+            className="group flex select-none items-center gap-3.5 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
           >
-            <div className="flex items-baseline">
-              <span className="font-serif text-3xl md:text-4xl font-light tracking-tighter text-black">
-                MR
-              </span>
-            </div>
-            <div className="flex flex-col border-l border-black/20 pl-3.5">
-              <span className="text-xs md:text-sm font-semibold tracking-[0.2em] text-neutral-900 uppercase">
+            <motion.span
+              className="font-serif text-3xl font-light tracking-tighter text-black md:text-4xl"
+              whileHover={prefersReducedMotion ? undefined : { x: 1, skewX: -2 }}
+              transition={{ duration: 0.3, ease: fluidEase }}
+            >
+              MR
+            </motion.span>
+            <span className="flex flex-col border-l border-black/20 pl-3.5">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-900 md:text-sm">
                 Mick Ramos
               </span>
-              <span className="text-[9px] md:text-[10px] font-medium tracking-[0.25em] text-neutral-500 uppercase">
+              <span className="text-[9px] font-medium uppercase tracking-[0.25em] text-neutral-500 md:text-[10px]">
                 Arquitetura · Design
               </span>
-            </div>
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav
-            className="hidden md:flex items-center gap-8 lg:gap-10"
-            aria-label="Navegação Principal"
-          >
+          <nav className="hidden items-center gap-8 md:flex lg:gap-10" aria-label="Navegação Principal">
             {navLinks.map((link) => {
               const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(link.href);
+                link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
 
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="relative py-1 text-sm tracking-wide text-neutral-700 hover:text-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-xs"
+                  className="group relative rounded-sm py-2 text-sm tracking-wide text-neutral-700 transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
                 >
-                  <span className={isActive ? "font-semibold text-black" : "font-normal"}>
+                  <span className={isActive ? "font-medium text-black" : "font-normal"}>
                     {link.name}
                   </span>
+                  <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-black/35 transition-transform duration-500 ease-out group-hover:scale-x-100" />
                   {isActive && (
-                    <motion.div
+                    <motion.span
                       layoutId="nav-underline"
-                      className="absolute left-0 bottom-0 w-full h-[1.5px] bg-black"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      className="absolute inset-x-0 bottom-0 h-[1.5px] bg-black"
+                      transition={{ type: "spring", stiffness: 340, damping: 32, mass: 0.65 }}
                     />
                   )}
                 </Link>
@@ -102,82 +101,111 @@ export function Header() {
             })}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden">
-            <button
-              id="mobile-menu-toggle"
-              type="button"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-neutral-800 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-md"
-              aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
-              aria-expanded={isMobileMenuOpen}
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
+          <button
+            id="mobile-menu-toggle"
+            type="button"
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+            className="relative z-[70] flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/55 text-neutral-900 backdrop-blur-md transition-colors hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black md:hidden"
+            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-overlay"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={isMobileMenuOpen ? "close" : "open"}
+                initial={prefersReducedMotion ? false : { opacity: 0, rotate: -12, scale: 0.8 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={prefersReducedMotion ? undefined : { opacity: 0, rotate: 12, scale: 0.8 }}
+                transition={{ duration: 0.2, ease: fluidEase }}
+              >
+                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </motion.span>
+            </AnimatePresence>
+          </button>
         </div>
-      </header>
+      </motion.header>
 
-      {/* Mobile Fullscreen Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             id="mobile-nav-overlay"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="fixed inset-0 z-30 bg-[#f8f7f4] flex flex-col justify-between p-8 pt-28 md:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu principal"
+            initial={
+              prefersReducedMotion
+                ? { opacity: 0 }
+                : { opacity: 0, clipPath: "circle(0% at calc(100% - 44px) 42px)" }
+            }
+            animate={
+              prefersReducedMotion
+                ? { opacity: 1 }
+                : { opacity: 1, clipPath: "circle(150% at calc(100% - 44px) 42px)" }
+            }
+            exit={
+              prefersReducedMotion
+                ? { opacity: 0 }
+                : { opacity: 0, clipPath: "circle(0% at calc(100% - 44px) 42px)" }
+            }
+            transition={{ duration: prefersReducedMotion ? 0.15 : 0.72, ease: fluidEase }}
+            className="fixed inset-0 z-[60] flex flex-col justify-between overflow-hidden bg-[#f6f4ef] px-7 pb-8 pt-28 md:hidden"
           >
-            <nav className="flex flex-col space-y-6">
-              {navLinks.map((link, idx) => {
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+              <motion.div
+                initial={prefersReducedMotion ? false : { x: "22%", y: "-8%", rotate: -8 }}
+                animate={prefersReducedMotion ? undefined : { x: "5%", y: "2%", rotate: 0 }}
+                transition={{ duration: 1.05, ease: fluidEase }}
+                className="absolute -right-24 top-16 h-[42vh] w-[92vw] rounded-[50%] border border-black/[0.055] bg-white/35 blur-[0.2px]"
+              />
+              <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full border border-black/[0.04]" />
+            </div>
+
+            <nav className="relative z-10 flex flex-col" aria-label="Navegação móvel">
+              {navLinks.map((link, index) => {
                 const isActive =
-                  link.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(link.href);
+                  link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
 
                 return (
                   <motion.div
                     key={link.href}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.05 }}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 22 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.18 + index * 0.055, duration: 0.55, ease: fluidEase }}
                   >
                     <Link
                       href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center justify-between py-2 text-2xl font-light tracking-tight text-neutral-800 hover:text-black border-b border-black/5"
+                      className="group grid grid-cols-[42px_1fr_auto] items-center border-b border-black/[0.075] py-4"
                     >
-                      <span className={isActive ? "font-semibold text-black" : ""}>
+                      <span className="font-mono text-[10px] tracking-[0.18em] text-neutral-400">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className={`text-[clamp(1.8rem,8vw,2.55rem)] font-light tracking-[-0.035em] ${isActive ? "text-black" : "text-neutral-700"}`}>
                         {link.name}
                       </span>
-                      {isActive ? (
-                        <span className="text-xs tracking-widest uppercase font-mono px-2 py-0.5 bg-black text-white rounded-full">
-                          Atual
-                        </span>
-                      ) : (
-                        <ArrowRight className="w-4 h-4 text-neutral-400" />
-                      )}
+                      <ArrowUpRight className={`h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${isActive ? "text-black" : "text-neutral-400"}`} />
                     </Link>
                   </motion.div>
                 );
               })}
             </nav>
 
-            <div className="pt-8 border-t border-black/10 space-y-2 text-xs text-neutral-600">
-              <div className="font-semibold uppercase tracking-wider text-black">
-                {siteConfig.name} — {siteConfig.role}
+            <motion.div
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: prefersReducedMotion ? 0 : 0.52, duration: 0.5, ease: fluidEase }}
+              className="relative z-10 grid grid-cols-2 gap-6 border-t border-black/10 pt-6 text-[11px] text-neutral-500"
+            >
+              <div>
+                <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-neutral-400">Estúdio</p>
+                <p className="font-medium text-neutral-800">{siteConfig.name}</p>
+                <p>{siteConfig.role}</p>
               </div>
-              <p>{siteConfig.email}</p>
-              <p>{siteConfig.phone}</p>
-              <p className="text-[11px] text-neutral-500 pt-2">
-                © {new Date().getFullYear()} Mick Ramos. Todos os direitos reservados.
-              </p>
-            </div>
+              <div className="text-right">
+                <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-neutral-400">Contato</p>
+                <p>{siteConfig.email}</p>
+                <p>{siteConfig.phone}</p>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
