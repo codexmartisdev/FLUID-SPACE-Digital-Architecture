@@ -78,6 +78,17 @@
   text-shadow: 0 1px 10px rgba(250, 249, 247, 0.2);
 }
 
+/* Decorative captions removed from hero image overlap zones.
+   The left-side metadata remains; only the low-contrast right caption is hidden. */
+#hero-section > div.relative.z-10 > div:last-child > div:last-child,
+#sobre-hero > div.relative.z-10 > div:last-child > div:last-child,
+#servicos-hero > div.relative.z-10 > div:last-child > div:last-child,
+#projetos-hero > div.relative.z-10 > div:last-child > div:last-child,
+#blog-hero > div.relative.z-10 > div:last-child > div:last-child,
+#contato-hero > div.relative.z-10 > div:last-child > div:last-child {
+  display: none;
+}
+
 @media (max-width: 1023px) {
   :is(
     #hero-section,
