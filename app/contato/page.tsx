@@ -2,39 +2,68 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Phone, MapPin, Instagram, ArrowRight, CheckCircle2 } from "lucide-react";
+import { MessageCircle, MapPin, Instagram, ArrowRight } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { createWhatsAppUrl } from "@/core/services/whatsapp";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { FAQAccordion } from "@/components/sections/FAQAccordion";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 
+const projectOptions = [
+  "Arquitetura Residencial",
+  "Design de Interiores",
+  "Comercial / Corporativo",
+  "Reforma Global",
+  "Consultoria Especializada",
+];
+
 export default function ContatoPage() {
   const [formData, setFormData] = useState({
     nome: "",
-    email: "",
     whatsapp: "",
     cidade: "",
     tipoProjeto: "",
     area: "",
     mensagem: "",
+    destinatario: siteConfig.phones[0]?.tel ?? "",
   });
 
-  const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-    }, 600);
+    const recipient =
+      siteConfig.phones.find((contact) => contact.tel === formData.destinatario) ??
+      siteConfig.phones[0];
+
+    if (!recipient) return;
+
+    const message = [
+      "Olá, LaR Arquitetura e Interiores!",
+      "",
+      `Meu nome é ${formData.nome.trim()} e gostaria de conversar sobre um projeto.`,
+      `Tipo de projeto: ${formData.tipoProjeto}`,
+      formData.cidade.trim() ? `Cidade: ${formData.cidade.trim()}` : "",
+      formData.area.trim() ? `Área aproximada: ${formData.area.trim()}` : "",
+      `Meu WhatsApp: ${formData.whatsapp.trim()}`,
+      "",
+      `Mensagem: ${formData.mensagem.trim()}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    const url = createWhatsAppUrl(recipient.tel, message);
+    const opened = window.open(url, "_blank", "noopener,noreferrer");
+
+    if (!opened) {
+      window.location.href = url;
+    }
   };
 
   const atuacaoCards = [
     {
       title: "Residencial",
-      description: "Projetos para casas e apartamentos que unem estética, funcionalidade e bem-estar.",
+      description:
+        "Projetos para casas e apartamentos que unem estética, funcionalidade e bem-estar.",
       image:
         "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
     },
@@ -52,7 +81,8 @@ export default function ContatoPage() {
     },
     {
       title: "Consultoria",
-      description: "Orientação técnica para transformar suas ideias em decisões seguras e eficientes.",
+      description:
+        "Orientação técnica para transformar suas ideias em decisões seguras e eficientes.",
       image:
         "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
     },
@@ -95,7 +125,9 @@ export default function ContatoPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-neutral-600 font-light leading-relaxed max-w-lg mb-8">
-              Estamos à disposição para ouvir seu projeto, seja ele residencial, comercial, de interiores ou uma consultoria. Vamos entender suas necessidades e te guiar nos próximos passos, com clareza e sensibilidade.
+              Estamos à disposição para ouvir seu projeto, seja ele residencial, comercial,
+              de interiores ou uma consultoria. Vamos entender suas necessidades e te guiar
+              nos próximos passos, com clareza e sensibilidade.
             </p>
 
             <div className="border-l-2 border-black/20 pl-4 py-1 max-w-md">
@@ -119,7 +151,10 @@ export default function ContatoPage() {
         </div>
       </section>
 
-      <section id="contato-conexao" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
+      <section
+        id="contato-conexao"
+        className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5"
+      >
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             <div className="lg:col-span-2 flex flex-col">
@@ -140,7 +175,9 @@ export default function ContatoPage() {
                 Nós ajudamos a dar forma.
               </h2>
               <p className="text-sm sm:text-base text-neutral-600 font-light leading-relaxed max-w-lg">
-                Queremos entender suas necessidades, seu contexto, sua rotina, o local e seus objetivos. A partir dessa conversa, indicamos o melhor caminho para o seu projeto, sempre com um olhar atento, técnico e sensível.
+                Queremos entender suas necessidades, seu contexto, sua rotina, o local e seus
+                objetivos. A partir dessa conversa, indicamos o melhor caminho para o seu
+                projeto, sempre com um olhar atento, técnico e sensível.
               </p>
             </div>
 
@@ -162,7 +199,10 @@ export default function ContatoPage() {
         </div>
       </section>
 
-      <section id="contato-formulario-section" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
+      <section
+        id="contato-formulario-section"
+        className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5"
+      >
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             <div className="lg:col-span-5 space-y-8">
@@ -178,7 +218,8 @@ export default function ContatoPage() {
                   Estamos prontos para te ouvir.
                 </h2>
                 <p className="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed">
-                  Preencha o formulário ao lado ou entre em contato pelos nossos canais. Será um prazer conversar sobre o seu projeto.
+                  Preencha os dados ao lado e continue a conversa diretamente pelo WhatsApp.
+                  Nenhuma mensagem é enviada por e-mail.
                 </p>
               </div>
 
@@ -186,10 +227,15 @@ export default function ContatoPage() {
                 {siteConfig.phones.map((contact) => (
                   <a
                     key={contact.tel}
-                    href={`tel:${contact.tel}`}
+                    href={createWhatsAppUrl(
+                      contact.tel,
+                      "Olá, LaR Arquitetura e Interiores! Gostaria de conversar sobre um projeto.",
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center gap-3 hover:text-black transition-colors"
                   >
-                    <Phone className="w-4 h-4 text-neutral-400 shrink-0" />
+                    <MessageCircle className="w-4 h-4 text-neutral-400 shrink-0" />
                     <span>{contact.display}</span>
                   </a>
                 ))}
@@ -212,164 +258,175 @@ export default function ContatoPage() {
             </div>
 
             <div className="lg:col-span-7 bg-white p-8 md:p-12 rounded-3xl border border-black/10 shadow-xs">
-              {submitted ? (
-                <div className="py-12 flex flex-col items-center text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                    <CheckCircle2 className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-2xl font-light text-neutral-900">
-                    Mensagem recebida com sucesso!
-                  </h3>
-                  <p className="text-sm text-neutral-600 font-light max-w-md leading-relaxed">
-                    Obrigado por compartilhar suas ideias com a LaR Arquitetura e Interiores. Retornaremos assim que possível.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSubmitted(false);
-                      setFormData({
-                        nome: "",
-                        email: "",
-                        whatsapp: "",
-                        cidade: "",
-                        tipoProjeto: "",
-                        area: "",
-                        mensagem: "",
-                      });
-                    }}
-                    className="mt-6 px-6 py-2.5 rounded-full border border-black/20 text-xs font-mono uppercase tracking-wider hover:bg-neutral-100 transition-colors"
-                  >
-                    Enviar nova mensagem
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="nome" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
-                        Nome
-                      </label>
-                      <input
-                        id="nome"
-                        type="text"
-                        required
-                        value={formData.nome}
-                        onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                        placeholder="Seu nome completo"
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
-                        E-mail
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="seu@email.com"
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="whatsapp" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
-                        WhatsApp
-                      </label>
-                      <input
-                        id="whatsapp"
-                        type="tel"
-                        required
-                        value={formData.whatsapp}
-                        onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                        placeholder="(86) 9XXXX-XXXX"
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="cidade" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
-                        Cidade
-                      </label>
-                      <input
-                        id="cidade"
-                        type="text"
-                        value={formData.cidade}
-                        onChange={(e) => setFormData({ ...formData, cidade: e.target.value })}
-                        placeholder="Sua cidade"
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="tipoProjeto" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
-                        Tipo de projeto
-                      </label>
-                      <select
-                        id="tipoProjeto"
-                        required
-                        value={formData.tipoProjeto}
-                        onChange={(e) => setFormData({ ...formData, tipoProjeto: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-black"
-                      >
-                        <option value="">Selecione uma opção</option>
-                        <option value="Residencial">Arquitetura Residencial</option>
-                        <option value="Interiores">Design de Interiores</option>
-                        <option value="Comercial">Comercial / Corporativo</option>
-                        <option value="Reforma">Reforma Global</option>
-                        <option value="Consultoria">Consultoria Especializada</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor="area" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
-                        Área aproximada
-                      </label>
-                      <input
-                        id="area"
-                        type="text"
-                        value={formData.area}
-                        onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-                        placeholder="Ex.: 120 m²"
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
-                      />
-                    </div>
-                  </div>
-
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="mensagem" className="block text-xs font-mono uppercase text-neutral-500 mb-2">
-                      Mensagem
+                    <label
+                      htmlFor="nome"
+                      className="block text-xs font-mono uppercase text-neutral-500 mb-2"
+                    >
+                      Nome
                     </label>
-                    <textarea
-                      id="mensagem"
-                      rows={4}
+                    <input
+                      id="nome"
+                      type="text"
                       required
-                      value={formData.mensagem}
-                      onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
-                      placeholder="Conte um pouco sobre seu projeto, suas ideias e expectativas..."
-                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black resize-y"
+                      value={formData.nome}
+                      onChange={(event) => setFormData({ ...formData, nome: event.target.value })}
+                      placeholder="Seu nome completo"
+                      autoComplete="name"
+                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
                     />
                   </div>
 
                   <div>
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-neutral-900 text-white font-mono text-xs tracking-wider uppercase font-medium hover:bg-neutral-800 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+                    <label
+                      htmlFor="whatsapp"
+                      className="block text-xs font-mono uppercase text-neutral-500 mb-2"
                     >
-                      <span>{isSubmitting ? "Enviando..." : "Enviar Mensagem"}</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                      Seu WhatsApp
+                    </label>
+                    <input
+                      id="whatsapp"
+                      type="tel"
+                      required
+                      value={formData.whatsapp}
+                      onChange={(event) =>
+                        setFormData({ ...formData, whatsapp: event.target.value })
+                      }
+                      placeholder="(86) 9XXXX-XXXX"
+                      autoComplete="tel"
+                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
                   </div>
-                </form>
-              )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      htmlFor="cidade"
+                      className="block text-xs font-mono uppercase text-neutral-500 mb-2"
+                    >
+                      Cidade
+                    </label>
+                    <input
+                      id="cidade"
+                      type="text"
+                      value={formData.cidade}
+                      onChange={(event) =>
+                        setFormData({ ...formData, cidade: event.target.value })
+                      }
+                      placeholder="Sua cidade"
+                      autoComplete="address-level2"
+                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="destinatario"
+                      className="block text-xs font-mono uppercase text-neutral-500 mb-2"
+                    >
+                      Falar com
+                    </label>
+                    <select
+                      id="destinatario"
+                      required
+                      value={formData.destinatario}
+                      onChange={(event) =>
+                        setFormData({ ...formData, destinatario: event.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-black"
+                    >
+                      {siteConfig.phones.map((contact) => (
+                        <option key={contact.tel} value={contact.tel}>
+                          {contact.label} · {contact.display}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      htmlFor="tipoProjeto"
+                      className="block text-xs font-mono uppercase text-neutral-500 mb-2"
+                    >
+                      Tipo de projeto
+                    </label>
+                    <select
+                      id="tipoProjeto"
+                      required
+                      value={formData.tipoProjeto}
+                      onChange={(event) =>
+                        setFormData({ ...formData, tipoProjeto: event.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-black"
+                    >
+                      <option value="">Selecione uma opção</option>
+                      {projectOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="area"
+                      className="block text-xs font-mono uppercase text-neutral-500 mb-2"
+                    >
+                      Área aproximada
+                    </label>
+                    <input
+                      id="area"
+                      type="text"
+                      value={formData.area}
+                      onChange={(event) => setFormData({ ...formData, area: event.target.value })}
+                      placeholder="Ex.: 120 m²"
+                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="mensagem"
+                    className="block text-xs font-mono uppercase text-neutral-500 mb-2"
+                  >
+                    Mensagem
+                  </label>
+                  <textarea
+                    id="mensagem"
+                    rows={4}
+                    required
+                    value={formData.mensagem}
+                    onChange={(event) =>
+                      setFormData({ ...formData, mensagem: event.target.value })
+                    }
+                    placeholder="Conte um pouco sobre seu projeto, suas ideias e expectativas..."
+                    className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f7] text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black resize-y"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-neutral-900 text-white font-mono text-xs tracking-wider uppercase font-medium hover:bg-neutral-800 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Continuar no WhatsApp</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+
+                  <p className="text-[11px] leading-relaxed text-neutral-500">
+                    Ao continuar, o WhatsApp será aberto com esta mensagem preenchida. Os dados
+                    acima não são armazenados nem enviados pelo site.
+                  </p>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -411,7 +468,10 @@ export default function ContatoPage() {
         leftNote="RESPOSTAS PARA VOCÊ COMEÇAR COM MAIS SEGURANÇA"
       />
 
-      <section id="contato-atuacao" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
+      <section
+        id="contato-atuacao"
+        className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5"
+      >
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-baseline mb-16">
             <div className="lg:col-span-2 flex items-baseline gap-2">
@@ -436,23 +496,23 @@ export default function ContatoPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {atuacaoCards.map((c) => (
+            {atuacaoCards.map((card) => (
               <div
-                key={c.title}
+                key={card.title}
                 className="flex flex-col p-4 rounded-xl bg-white border border-black/5 shadow-xs"
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-neutral-100 mb-4">
                   <Image
-                    src={c.image}
-                    alt={c.title}
+                    src={card.image}
+                    alt={card.title}
                     fill
                     sizes="(max-width: 640px) 100vw, 25vw"
                     className="object-cover"
                   />
                 </div>
-                <h4 className="text-base font-medium text-neutral-900 mb-1">{c.title}</h4>
+                <h4 className="text-base font-medium text-neutral-900 mb-1">{card.title}</h4>
                 <p className="text-xs text-neutral-500 font-light leading-relaxed">
-                  {c.description}
+                  {card.description}
                 </p>
               </div>
             ))}
@@ -464,7 +524,7 @@ export default function ContatoPage() {
         sectionNumber="06"
         title="Vamos transformar sua ideia em espaço real?"
         subtitle="Será um prazer conhecer seu projeto e construir esse próximo passo com você."
-        buttonText="AGENDAR CONVERSA"
+        buttonText="INICIAR CONVERSA"
         buttonHref="#contato-formulario-section"
       />
     </div>
