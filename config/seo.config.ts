@@ -4,20 +4,25 @@ function normalizeUrl(value: string) {
   return value.trim().replace(/\/+$/, "");
 }
 
+function normalizeHost(value: string) {
+  const normalized = normalizeUrl(value);
+  return /^https?:\/\//i.test(normalized) ? normalized : `https://${normalized}`;
+}
+
 function resolveSiteUrl() {
   const explicitUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL;
   if (explicitUrl) {
-    return normalizeUrl(explicitUrl);
+    return normalizeHost(explicitUrl);
   }
 
   const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   if (productionHost) {
-    return `https://${normalizeUrl(productionHost)}`;
+    return normalizeHost(productionHost);
   }
 
   const deploymentHost = process.env.VERCEL_URL;
   if (deploymentHost) {
-    return `https://${normalizeUrl(deploymentHost)}`;
+    return normalizeHost(deploymentHost);
   }
 
   return "http://localhost:3000";
