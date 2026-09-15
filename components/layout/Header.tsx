@@ -15,6 +15,9 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const isProjectDetail = pathname.startsWith("/projetos/") && pathname !== "/projetos";
+  const useLightHeader = isProjectDetail && !isScrolled && !isMobileMenuOpen;
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 28);
     handleScroll();
@@ -42,7 +45,7 @@ export function Header() {
           paddingTop: isScrolled ? 12 : 22,
           paddingBottom: isScrolled ? 12 : 22,
           backgroundColor: isScrolled
-            ? "rgba(250, 249, 247, 0.88)"
+            ? "rgba(250, 249, 247, 0.91)"
             : "rgba(250, 249, 247, 0)",
           boxShadow: isScrolled
             ? "0 1px 0 rgba(0,0,0,0.055), 0 12px 40px rgba(18,19,22,0.035)"
@@ -55,20 +58,34 @@ export function Header() {
           <Link
             href="/"
             aria-label="Mick Ramos Arquitetura - Início"
-            className="group flex select-none items-center gap-3.5 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+            className="group flex select-none items-center gap-3.5 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-current"
           >
             <motion.span
-              className="font-serif text-3xl font-light tracking-tighter text-black md:text-4xl"
+              className={`font-serif text-3xl font-light tracking-tighter transition-colors duration-300 md:text-4xl ${
+                useLightHeader ? "text-white" : "text-black"
+              }`}
               whileHover={prefersReducedMotion ? undefined : { x: 1, skewX: -2 }}
               transition={{ duration: 0.3, ease: fluidEase }}
             >
               MR
             </motion.span>
-            <span className="flex flex-col border-l border-black/20 pl-3.5">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-900 md:text-sm">
+            <span
+              className={`flex flex-col border-l pl-3.5 transition-colors duration-300 ${
+                useLightHeader ? "border-white/30" : "border-black/20"
+              }`}
+            >
+              <span
+                className={`text-xs font-semibold uppercase tracking-[0.2em] transition-colors duration-300 md:text-sm ${
+                  useLightHeader ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 Mick Ramos
               </span>
-              <span className="text-[9px] font-medium uppercase tracking-[0.25em] text-neutral-500 md:text-[10px]">
+              <span
+                className={`text-[9px] font-medium uppercase tracking-[0.25em] transition-colors duration-300 md:text-[10px] ${
+                  useLightHeader ? "text-white/70" : "text-neutral-500"
+                }`}
+              >
                 Arquitetura · Design
               </span>
             </span>
@@ -83,16 +100,24 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="group relative rounded-sm py-2 text-sm tracking-wide text-neutral-700 transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                  className={`group relative rounded-sm py-2 text-sm tracking-wide transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+                    useLightHeader ? "text-white/75 hover:text-white" : "text-neutral-700 hover:text-black"
+                  }`}
                 >
-                  <span className={isActive ? "font-medium text-black" : "font-normal"}>
+                  <span className={isActive ? "font-medium" : "font-normal"}>
                     {link.name}
                   </span>
-                  <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-black/35 transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                  <span
+                    className={`absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100 ${
+                      useLightHeader ? "bg-white/45" : "bg-black/35"
+                    }`}
+                  />
                   {isActive && (
                     <motion.span
                       layoutId="nav-underline"
-                      className="absolute inset-x-0 bottom-0 h-[1.5px] bg-black"
+                      className={`absolute inset-x-0 bottom-0 h-[1.5px] ${
+                        useLightHeader ? "bg-white" : "bg-black"
+                      }`}
                       transition={{ type: "spring", stiffness: 340, damping: 32, mass: 0.65 }}
                     />
                   )}
@@ -105,7 +130,11 @@ export function Header() {
             id="mobile-menu-toggle"
             type="button"
             onClick={() => setIsMobileMenuOpen((open) => !open)}
-            className="relative z-[80] flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/55 text-neutral-900 backdrop-blur-md transition-colors hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black md:hidden"
+            className={`relative z-[80] flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-current md:hidden ${
+              useLightHeader
+                ? "border-white/25 bg-black/10 text-white hover:bg-black/20"
+                : "border-black/10 bg-white/60 text-neutral-900 hover:bg-white"
+            }`}
             aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav-overlay"
