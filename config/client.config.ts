@@ -1,3 +1,9 @@
+export interface PhoneContact {
+  label: string;
+  display: string;
+  tel: string;
+}
+
 export interface SiteConfig {
   name: string;
   brand: string;
@@ -7,22 +13,22 @@ export interface SiteConfig {
   email: string;
   whatsapp: string;
   phone: string;
+  phones: PhoneContact[];
   instagram: string;
+  instagramUrl: string;
   linkedin: string;
   city: string;
+  locations: string[];
   address: string;
   hours: string;
 }
 
 /**
- * Canonical client configuration for the LaR deployment.
+ * Canonical public configuration for LaR Arquitetura e Interiores.
  *
- * Keep public identity/contact fallbacks here. Runtime integrations, secrets,
- * Firebase bootstrap and authorization must live outside this file.
- *
- * G2 intentionally preserves the current placeholder contact values so this
- * structural refactor cannot change the rendered site. G3 will replace them
- * with definitive LaR data.
+ * Only confirmed public information belongs here. Missing information must stay
+ * empty instead of being replaced with invented placeholders. Runtime services,
+ * secrets, Firebase bootstrap and authorization live outside this file.
  */
 export const siteConfig: SiteConfig = {
   name: "LaR",
@@ -30,15 +36,29 @@ export const siteConfig: SiteConfig = {
   role: "ARQUITETURA · INTERIORES",
   tagline: "ARQUITETURA QUE MOVE",
   description:
-    "Projetos autorais que unem estética, funcionalidade e contexto. Espaços não são ocupados, são experimentados.",
-  email: "contato@mickramos.com.br",
-  whatsapp: "+55 11 98765-4321",
-  phone: "+55 11 98765-4321",
-  instagram: "@mickramos",
-  linkedin: "/mickramos",
-  city: "São Paulo, SP",
-  address: "São Paulo, SP",
-  hours: "Seg – Sex, 9h às 18h. Respondemos em até 1 dia útil.",
+    "Projetos autorais de arquitetura e interiores que unem estética, funcionalidade e contexto. Espaços não são ocupados, são experimentados.",
+  email: "",
+  whatsapp: "",
+  phone: "(86) 9 9583-1320",
+  phones: [
+    {
+      label: "Contato 01",
+      display: "(86) 9 9583-1320",
+      tel: "+5586995831320",
+    },
+    {
+      label: "Contato 02",
+      display: "(86) 9 8172-9272",
+      tel: "+5586981729272",
+    },
+  ],
+  instagram: "@lar.arquitetura_",
+  instagramUrl: "https://www.instagram.com/lar.arquitetura_",
+  linkedin: "",
+  city: "Parnaíba - PI / Luiz Correia - PI",
+  locations: ["Parnaíba - PI", "Luiz Correia - PI"],
+  address: "",
+  hours: "",
 };
 
 export const navLinks = [
