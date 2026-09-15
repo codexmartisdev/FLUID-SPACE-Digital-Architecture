@@ -49,7 +49,7 @@ export function Header() {
             : "0 0 0 rgba(0,0,0,0)",
         }}
         transition={{ duration: 0.42, ease: fluidEase }}
-        className="fixed inset-x-0 top-0 z-50 border-b border-transparent backdrop-blur-[14px]"
+        className="fixed inset-x-0 top-0 z-[70] border-b border-transparent backdrop-blur-[14px]"
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 md:px-12">
           <Link
@@ -105,7 +105,7 @@ export function Header() {
             id="mobile-menu-toggle"
             type="button"
             onClick={() => setIsMobileMenuOpen((open) => !open)}
-            className="relative z-[70] flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/55 text-neutral-900 backdrop-blur-md transition-colors hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black md:hidden"
+            className="relative z-[80] flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/55 text-neutral-900 backdrop-blur-md transition-colors hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black md:hidden"
             aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav-overlay"
