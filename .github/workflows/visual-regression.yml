@@ -1,0 +1,88 @@
+name: Visual Regression
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 20
+
+      - name: Install candidate dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build candidate
+        run: npm run build
+
+      - name: Install visual comparison tools
+        run: npm install --no-save --package-lock=false --no-audit --no-fund puppeteer-core@24.17.0 pixelmatch@7.1.0 pngjs@7.0.0
+
+      - name: Prepare main worktree
+        run: git worktree add ../lar-main origin/main
+
+      - name: Install main dependencies
+        working-directory: ../lar-main
+        run: npm install --no-audit --no-fund
+
+      - name: Build main
+        working-directory: ../lar-main
+        run: npm run build
+
+      - name: Start candidate and main
+        shell: bash
+        run: |
+          nohup npm run start -- -p 3000 -H 127.0.0.1 > /tmp/candidate-server.log 2>&1 &
+          cd ../lar-main
+          nohup npm run start -- -p 3001 -H 127.0.0.1 > /tmp/main-server.log 2>&1 &
+
+      - name: Wait for servers
+        shell: bash
+        run: |
+          for port in 3000 3001; do
+            ready=0
+            for i in {1..60}; do
+              if curl -fsS "http://127.0.0.1:${port}" >/dev/null; then
+                ready=1
+                break
+              fi
+              sleep 1
+            done
+            if [ "$ready" -ne 1 ]; then
+              echo "Server on port ${port} did not become ready"
+              cat /tmp/candidate-server.log || true
+              cat /tmp/main-server.log || true
+              exit 1
+            fi
+          done
+
+      - name: Compare visual output
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node scripts/visual-regression.mjs
+
+      - name: Upload visual report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lar-visual-regression-report
+          path: visual-report
+          if-no-files-found: warn
+          retention-days: 7
