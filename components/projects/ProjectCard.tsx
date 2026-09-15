@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { Project } from "@/data/projects";
+import type { Project } from "@/lib/domain";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 
 interface ProjectCardProps {
