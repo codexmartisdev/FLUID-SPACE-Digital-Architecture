@@ -5,6 +5,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MotionShell } from "@/components/motion/MotionShell";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { seoConfig } from "@/config/seo.config";
+import { buildRootJsonLd, serializeJsonLd } from "@/lib/seo";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -14,20 +16,50 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "LaR Arquitetura e Interiores",
-  description:
-    "LaR Arquitetura e Interiores, com atuação em Parnaíba - PI e Luiz Correia - PI. Projetos que unem função, emoção e movimento.",
+  metadataBase: new URL(seoConfig.siteUrl),
+  title: {
+    default: seoConfig.defaultTitle,
+    template: "%s | LaR Arquitetura e Interiores",
+  },
+  description: seoConfig.defaultDescription,
+  applicationName: seoConfig.siteName,
+  keywords: [...seoConfig.keywords],
+  category: "Arquitetura e Interiores",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "LaR Arquitetura e Interiores",
-    description:
-      "Arquitetura e interiores em Parnaíba - PI e Luiz Correia - PI, com projetos que unem função, emoção e movimento.",
+    title: seoConfig.defaultTitle,
+    description: seoConfig.defaultDescription,
+    url: "/",
+    siteName: seoConfig.siteName,
+    locale: seoConfig.locale,
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "LaR Arquitetura e Interiores",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LaR Arquitetura e Interiores",
-    description:
-      "Arquitetura e interiores em Parnaíba - PI e Luiz Correia - PI.",
+    title: seoConfig.defaultTitle,
+    description: seoConfig.defaultDescription,
+    images: ["/opengraph-image"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -36,12 +68,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const rootJsonLd = buildRootJsonLd();
+
   return (
     <html lang="pt-BR" className={jakarta.variable} data-theme="lar">
       <body
         className="font-sans antialiased min-h-screen flex flex-col"
         suppressHydrationWarning
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(rootJsonLd) }}
+        />
         <CustomCursor />
         <Header />
         <main className="flex-1 w-full overflow-x-clip">
