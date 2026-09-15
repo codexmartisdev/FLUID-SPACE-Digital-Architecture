@@ -139,6 +139,16 @@ p {
   text-wrap: pretty;
 }
 
+/* When the Motion cursor is active, suppress the native pointer only on the
+   surfaces it replaces. Text fields preserve the normal I-beam cursor. */
+html[data-custom-cursor="enabled"] body,
+html[data-custom-cursor="enabled"] a,
+html[data-custom-cursor="enabled"] button,
+html[data-custom-cursor="enabled"] [role="button"],
+html[data-custom-cursor="enabled"] [data-cursor] {
+  cursor: none !important;
+}
+
 @media (max-width: 1023px) {
   :is(
     #hero-section,
