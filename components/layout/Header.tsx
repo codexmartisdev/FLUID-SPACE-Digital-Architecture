@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -15,6 +15,8 @@ export function Header() {
   const prefersReducedMotion = useReducedMotion();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuPath, setMobileMenuPath] = useState<string | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileOverlayRef = useRef<HTMLDivElement>(null);
 
   const isMobileMenuOpen = mobileMenuPath === pathname;
   const isProjectDetail = pathname.startsWith("/projetos/") && pathname !== "/projetos";
@@ -31,6 +33,60 @@ export function Header() {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const overlay = mobileOverlayRef.current;
+    if (!overlay) return;
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    const focusFirstItem = () => {
+      const focusable = Array.from(
+        overlay.querySelectorAll<HTMLElement>(focusableSelector),
+      );
+      focusable[0]?.focus();
+    };
+
+    const animationFrame = window.requestAnimationFrame(focusFirstItem);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMobileMenuPath(null);
+        window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const focusable = Array.from(
+        overlay.querySelectorAll<HTMLElement>(focusableSelector),
+      ).filter((element) => !element.hasAttribute("disabled"));
+
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isMobileMenuOpen]);
 
@@ -63,6 +119,7 @@ export function Header() {
             href="/"
             onClick={closeMobileMenu}
             aria-label="LaR Arquitetura e Interiores - Início"
+            aria-current={pathname === "/" ? "page" : undefined}
             className={`group rounded-sm transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-current ${
               useLightHeader ? "text-white" : "text-[#191a1d]"
             }`}
@@ -74,7 +131,7 @@ export function Header() {
             />
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex lg:gap-10" aria-label="Navegação Principal">
+          <nav className="hidden items-center gap-8 md:flex lg:gap-10" aria-label="Navegação principal">
             {navLinks.map((link) => {
               const isActive =
                 link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
@@ -83,6 +140,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={isActive ? "page" : undefined}
                   className={`group relative rounded-sm py-2 text-sm tracking-wide transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-current ${
                     useLightHeader ? "text-white/75 hover:text-white" : "text-neutral-700 hover:text-black"
                   }`}
@@ -91,12 +149,14 @@ export function Header() {
                     {link.name}
                   </span>
                   <span
+                    aria-hidden="true"
                     className={`absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100 ${
                       useLightHeader ? "bg-white/45" : "bg-black/35"
                     }`}
                   />
                   {isActive && (
                     <motion.span
+                      aria-hidden="true"
                       layoutId="nav-underline"
                       className={`absolute inset-x-0 bottom-0 h-[1.5px] ${
                         useLightHeader ? "bg-white" : "bg-black"
@@ -110,6 +170,7 @@ export function Header() {
           </nav>
 
           <button
+            ref={menuButtonRef}
             id="mobile-menu-toggle"
             type="button"
             onClick={toggleMobileMenu}
@@ -124,6 +185,7 @@ export function Header() {
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
+                aria-hidden="true"
                 key={isMobileMenuOpen ? "close" : "open"}
                 initial={prefersReducedMotion ? false : { opacity: 0, rotate: -12, scale: 0.8 }}
                 animate={{ opacity: 1, rotate: 0, scale: 1 }}
@@ -140,6 +202,7 @@ export function Header() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            ref={mobileOverlayRef}
             id="mobile-nav-overlay"
             role="dialog"
             aria-modal="true"
@@ -191,7 +254,8 @@ export function Header() {
                     <Link
                       href={link.href}
                       onClick={closeMobileMenu}
-                      className="group grid grid-cols-[42px_1fr_auto] items-center border-b border-black/[0.075] py-4"
+                      aria-current={isActive ? "page" : undefined}
+                      className="group grid grid-cols-[42px_1fr_auto] items-center border-b border-black/[0.075] py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
                     >
                       <span className="font-mono text-[10px] tracking-[0.18em] text-neutral-400">
                         {String(index + 1).padStart(2, "0")}
@@ -204,6 +268,7 @@ export function Header() {
                         {link.name}
                       </span>
                       <ArrowUpRight
+                        aria-hidden="true"
                         className={`h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
                           isActive ? "text-black" : "text-neutral-400"
                         }`}
@@ -236,7 +301,7 @@ export function Header() {
                   <a
                     key={contact.tel}
                     href={`tel:${contact.tel}`}
-                    className="block transition-colors hover:text-black"
+                    className="block transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
                   >
                     {contact.display}
                   </a>
@@ -245,7 +310,8 @@ export function Header() {
                   href={siteConfig.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 block transition-colors hover:text-black"
+                  aria-label={`${siteConfig.instagram} no Instagram (abre em nova aba)`}
+                  className="mt-2 block transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
                 >
                   {siteConfig.instagram}
                 </a>
