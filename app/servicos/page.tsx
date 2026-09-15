@@ -8,9 +8,6 @@ import { ContactCTA } from "@/components/sections/ContactCTA";
 export default function ServicosPage() {
   return (
     <div className="w-full">
-      {/* =========================================================================
-          HERO SECTION (3. Serviços.png)
-      ========================================================================= */}
       <section
         id="servicos-hero"
         className="relative min-h-[90vh] pt-32 pb-16 md:pt-40 md:pb-24 flex flex-col justify-between overflow-hidden bg-[#faf9f7]"
@@ -33,11 +30,7 @@ export default function ServicosPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full flex-1 flex flex-col justify-between">
           <div className="max-w-2xl pt-6 md:pt-10">
             <span className="inline-block font-mono text-[11px] md:text-xs tracking-[0.25em] text-neutral-500 uppercase mb-4">
-              Serviços
-            </span>
-
-            <span className="block font-light text-2xl sm:text-3xl text-neutral-500 mb-2">
-              Serviços
+              LaR · Arquitetura e Interiores
             </span>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight text-neutral-900 leading-[1.1] mb-6">
@@ -54,7 +47,7 @@ export default function ServicosPage() {
                 &ldquo;Cada projeto exige sensibilidade, método e presença.&rdquo;
               </p>
               <span className="block text-[10px] font-mono tracking-widest uppercase text-neutral-400 mt-1">
-                Mick Ramos
+                LaR
               </span>
             </div>
           </div>
@@ -70,9 +63,6 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          01 — VISÃO GERAL (3. Serviços.png)
-      ========================================================================= */}
       <section id="servicos-visao-geral" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -113,12 +103,8 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          02 — SERVIÇOS (Detailed list as in 3. Serviços.png)
-      ========================================================================= */}
       <section id="servicos-lista-detalhada" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          {/* Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-baseline justify-between gap-4 mb-16 pb-6 border-b border-black/10">
             <div className="flex items-baseline gap-2">
               <span className="font-mono text-xs tracking-widest text-neutral-400">02</span>
@@ -131,14 +117,12 @@ export default function ServicosPage() {
             </span>
           </div>
 
-          {/* 5 Rows */}
           <div className="space-y-12">
             {servicesData.map((s) => (
               <div
                 key={s.id}
                 className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-6 md:p-8 rounded-2xl bg-white border border-black/5 shadow-xs hover:border-black/15 transition-all"
               >
-                {/* Left image thumbnail */}
                 <div className="lg:col-span-3 relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-neutral-100">
                   <Image
                     src={s.image}
@@ -149,7 +133,6 @@ export default function ServicosPage() {
                   />
                 </div>
 
-                {/* Center title & description */}
                 <div className="lg:col-span-5 space-y-2">
                   <h3 className="text-xl md:text-2xl font-light text-neutral-900">{s.title}</h3>
                   <p className="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed">
@@ -157,7 +140,6 @@ export default function ServicosPage() {
                   </p>
                 </div>
 
-                {/* Right vertical divider + tags */}
                 <div className="lg:col-span-4 lg:border-l border-black/10 lg:pl-8 flex flex-wrap items-center gap-2 text-xs text-neutral-600 font-mono">
                   {s.tags.map((tag, idx) => (
                     <span key={tag} className="flex items-center gap-2">
@@ -174,9 +156,6 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          03 — PROCESSO (3. Serviços.png)
-      ========================================================================= */}
       <ProcessTimeline
         sectionNumber="03"
         sectionTag="PROCESSO"
@@ -206,12 +185,8 @@ export default function ServicosPage() {
         ]}
       />
 
-      {/* =========================================================================
-          04 — ENTREGÁVEIS (3. Serviços.png)
-      ========================================================================= */}
       <section id="servicos-entregaveis" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          {/* Header */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-baseline mb-16">
             <div className="lg:col-span-2 flex items-baseline gap-2">
               <span className="font-mono text-xs tracking-widest text-neutral-400">04</span>
@@ -233,7 +208,6 @@ export default function ServicosPage() {
             </div>
           </div>
 
-          {/* 5 Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {deliverablesData.map((item) => (
               <div
@@ -259,9 +233,6 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          05 — FORMATOS (3. Serviços.png)
-      ========================================================================= */}
       <section id="servicos-formatos" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-12">
@@ -286,7 +257,6 @@ export default function ServicosPage() {
             </div>
           </div>
 
-          {/* Panoramic Backdrop Card with 3 columns */}
           <div className="relative rounded-2xl overflow-hidden bg-neutral-900 text-white p-8 md:p-12">
             <div className="absolute inset-0 z-0">
               <Image
@@ -313,9 +283,6 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          06 — CONTATO CTA
-      ========================================================================= */}
       <ContactCTA
         sectionNumber="06"
         title="Vamos definir o serviço ideal para o seu projeto?"
