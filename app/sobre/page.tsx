@@ -162,20 +162,26 @@ export default function SobrePage() {
               </div>
             </div>
 
-            <div className="flex flex-col items-end lg:col-span-4">
-              <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-xl bg-neutral-200 shadow-xs">
+            <figure className="flex flex-col lg:col-span-4">
+              <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-black/[0.06] bg-neutral-200 shadow-[0_18px_50px_rgba(17,18,21,0.08)]">
                 <Image
-                  src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80"
-                  alt="Processo de criação e desenvolvimento arquitetônico"
+                  src="/images/about/lar-founders.png"
+                  alt="Laise Brito à esquerda e Rita Fontenele à direita, fundadoras da LaR Arquitetura e Interiores"
                   fill
                   sizes="(max-width: 1024px) 100vw, 33vw"
-                  className="object-cover"
+                  className="object-cover object-center"
                 />
+                <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/20" />
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-wider text-neutral-500">
-                Duas perspectivas. Uma linguagem.
-              </p>
-            </div>
+              <figcaption className="mt-4 flex flex-col gap-1 border-t border-black/10 pt-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+                <span className="text-sm font-medium tracking-tight text-neutral-800">
+                  Laise Brito <span className="font-light text-neutral-400">·</span> Rita Fontenele
+                </span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-neutral-400 sm:text-right">
+                  Fundadoras · LaR Arquitetura e Interiores
+                </span>
+              </figcaption>
+            </figure>
           </div>
         </div>
       </section>
