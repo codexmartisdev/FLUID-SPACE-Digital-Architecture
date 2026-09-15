@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { MotionShell } from "@/components/motion/MotionShell";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -40,7 +41,9 @@ export default function RootLayout({
       <body className="font-sans antialiased bg-[#faf9f7] text-[#191a1d] min-h-screen flex flex-col selection:bg-black selection:text-white" suppressHydrationWarning>
         <CustomCursor />
         <Header />
-        <main className="flex-1 w-full">{children}</main>
+        <main className="flex-1 w-full overflow-x-clip">
+          <MotionShell>{children}</MotionShell>
+        </main>
         <Footer />
       </body>
     </html>
