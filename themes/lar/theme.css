@@ -1,6 +1,74 @@
 /*
- * LaR semantic theme boundary.
+ * LaR Arquitetura e Interiores — canonical visual theme.
  *
- * Intentionally not imported during G2 so the current visual output remains
- * unchanged. G4 will migrate semantic design tokens from app/globals.css here.
+ * G4 promotes this file to the visual source of truth. The aliases at the
+ * bottom preserve compatibility with the pre-G4 globals while pages migrate
+ * gradually to semantic LaR tokens.
  */
+
+:root,
+[data-theme="lar"] {
+  /* Surfaces */
+  --lar-color-bg-site: #faf9f7;
+  --lar-color-bg-mineral: #f8f8f7;
+  --lar-color-bg-cream: #f4f3f0;
+  --lar-color-bg-dark: #111215;
+  --lar-color-surface: #ffffff;
+
+  /* Text */
+  --lar-color-text-primary: #191a1d;
+  --lar-color-text-muted: #6b6f76;
+  --lar-color-text-on-dark: #ffffff;
+
+  /* Interaction and structure */
+  --lar-color-border-subtle: rgba(0, 0, 0, 0.08);
+  --lar-color-focus-ring: rgba(25, 26, 29, 0.88);
+  --lar-color-selection-bg: #1c1d21;
+  --lar-color-selection-text: #f5f5f3;
+
+  /* Scrollbar */
+  --lar-color-scroll-track: #f1f0ec;
+  --lar-color-scroll-thumb: #c7c5be;
+  --lar-color-scroll-thumb-hover: #9e9c94;
+
+  /* Hero/image treatment */
+  --lar-hero-surface-rgb: 250, 249, 247;
+  --lar-image-saturation: 0.93;
+  --lar-image-saturation-mobile: 0.9;
+  --lar-image-contrast: 1.025;
+  --lar-image-contrast-mobile: 1.02;
+
+  /* Typography roles */
+  --lar-font-sans: var(--font-sans);
+  --lar-font-display: var(--font-sans);
+  --lar-font-body: var(--font-sans);
+  --lar-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Radius */
+  --lar-radius-sm: 0.375rem;
+  --lar-radius-card: 0.75rem;
+  --lar-radius-panel: 1.5rem;
+  --lar-radius-pill: 9999px;
+
+  /* Layout rhythm */
+  --lar-section-space: 5rem;
+  --lar-section-space-lg: 7rem;
+  --lar-container-max: 80rem;
+  --lar-header-offset: 92px;
+
+  /* Motion grammar */
+  --lar-motion-fast: 180ms;
+  --lar-motion-standard: 300ms;
+  --lar-motion-slow: 700ms;
+  --lar-ease-fluid: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Compatibility aliases — remove only after the whole UI uses semantic tokens. */
+  --bg-site: var(--lar-color-bg-site);
+  --bg-mineral: var(--lar-color-bg-mineral);
+  --bg-cream: var(--lar-color-bg-cream);
+  --bg-dark: var(--lar-color-bg-dark);
+  --text-primary: var(--lar-color-text-primary);
+  --text-muted: var(--lar-color-text-muted);
+  --border-subtle: var(--lar-color-border-subtle);
+  --focus-ring: var(--lar-color-focus-ring);
+}
