@@ -42,7 +42,7 @@ export function Footer() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="group inline-flex w-fit items-center gap-1.5 text-sm text-neutral-650 transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                  className="group inline-flex w-fit items-center gap-1.5 text-sm text-neutral-600 transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
                 >
                   <span>{item.name}</span>
                   <ArrowUpRight className="h-3 w-3 text-neutral-300 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-neutral-700" />
