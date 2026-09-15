@@ -24,9 +24,8 @@ export function FAQAccordion({
   };
 
   return (
-    <section id="faq-section" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
+    <section id="faq-section" aria-labelledby="faq-title" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        {/* Header Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-baseline mb-16">
           <div className="lg:col-span-2 flex flex-col gap-1">
             <div className="flex items-baseline gap-2">
@@ -43,27 +42,30 @@ export function FAQAccordion({
           </div>
 
           <div className="lg:col-span-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-neutral-900 mb-12">
+            <h2 id="faq-title" className="text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-neutral-900 mb-12">
               {title}
             </h2>
 
-            {/* Accordion list */}
             <div className="divide-y divide-black/10 border-y border-black/10">
               {faqData.map((item) => {
                 const isOpen = openId === item.id;
+                const buttonId = `faq-question-${item.id}`;
+                const answerId = `faq-answer-${item.id}`;
+
                 return (
                   <div key={item.id} className="py-6">
                     <button
+                      id={buttonId}
                       type="button"
                       onClick={() => toggleItem(item.id)}
                       className="w-full flex items-center justify-between gap-6 text-left group focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-xs"
                       aria-expanded={isOpen}
-                      aria-controls={`faq-answer-${item.id}`}
+                      aria-controls={answerId}
                     >
                       <span className="text-base sm:text-lg md:text-xl font-normal text-neutral-900 group-hover:text-neutral-600 transition-colors">
                         {item.question}
                       </span>
-                      <span className="shrink-0 p-1 rounded-full text-neutral-500 group-hover:text-black transition-colors">
+                      <span aria-hidden="true" className="shrink-0 p-1 rounded-full text-neutral-500 group-hover:text-black transition-colors">
                         {isOpen ? (
                           <Minus className="w-5 h-5" />
                         ) : (
@@ -74,7 +76,9 @@ export function FAQAccordion({
 
                     {isOpen && (
                       <div
-                        id={`faq-answer-${item.id}`}
+                        id={answerId}
+                        role="region"
+                        aria-labelledby={buttonId}
                         className="mt-4 pt-2 text-xs sm:text-sm md:text-base text-neutral-600 font-light leading-relaxed max-w-3xl pr-8"
                       >
                         {item.answer}
