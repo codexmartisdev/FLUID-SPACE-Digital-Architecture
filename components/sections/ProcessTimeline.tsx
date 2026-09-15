@@ -1,3 +1,8 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+import { FluidReveal } from "@/components/motion/FluidReveal";
+
 interface TimelineStep {
   number: string;
   title: string;
@@ -11,6 +16,8 @@ interface ProcessTimelineProps {
   subtitle?: string;
   steps?: TimelineStep[];
 }
+
+const fluidEase = [0.22, 1, 0.36, 1] as const;
 
 export function ProcessTimeline({
   sectionNumber = "04",
@@ -31,7 +38,7 @@ export function ProcessTimeline({
     {
       number: "03",
       title: "Desenvolvimento",
-      description: "Detalhamamos, alinhamos e evoluímos juntos.",
+      description: "Detalhamos, alinhamos e evoluímos juntos.",
     },
     {
       number: "04",
@@ -40,67 +47,79 @@ export function ProcessTimeline({
     },
   ],
 }: ProcessTimelineProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <section id="processo-timeline-section" className="py-20 md:py-28 bg-[#faf9f7] border-t border-black/5 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        {/* Header Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-baseline mb-16 md:mb-20">
-          <div className="lg:col-span-2 flex items-baseline gap-3">
+    <section
+      id="processo-timeline-section"
+      className="overflow-hidden border-t border-black/5 bg-[#faf9f7] py-20 md:py-28"
+    >
+      <div className="mx-auto max-w-7xl px-6 md:px-12">
+        <div className="mb-16 grid grid-cols-1 items-baseline gap-6 md:mb-20 lg:grid-cols-12 lg:gap-12">
+          <FluidReveal className="flex items-baseline gap-3 lg:col-span-2" y={14}>
             <span className="font-mono text-xs tracking-widest text-neutral-400">{sectionNumber}</span>
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500">
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-neutral-500">
               {sectionTag}
             </span>
-          </div>
-          <div className="lg:col-span-6">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-neutral-900">
+          </FluidReveal>
+
+          <FluidReveal delay={0.05} className="lg:col-span-6">
+            <h2 className="text-2xl font-light tracking-tight text-neutral-900 sm:text-3xl md:text-4xl">
               {title}
             </h2>
-          </div>
-          <div className="lg:col-span-4 lg:text-right">
-            <p className="text-xs font-mono tracking-wide text-neutral-500 uppercase leading-relaxed">
+          </FluidReveal>
+
+          <FluidReveal delay={0.1} y={14} className="lg:col-span-4 lg:text-right">
+            <p className="font-mono text-xs uppercase leading-relaxed tracking-wide text-neutral-500">
               {subtitle}
             </p>
-          </div>
+          </FluidReveal>
         </div>
 
-        {/* Timeline with flowing connecting curve */}
-        <div className="relative pt-6 pb-2">
-          {/* Subtle curved connecting line across desktop */}
-          <div className="hidden md:block absolute top-8 left-0 right-0 h-10 pointer-events-none opacity-40">
-            <svg
-              className="w-full h-full"
-              viewBox="0 0 1000 40"
-              fill="none"
-              preserveAspectRatio="none"
-            >
-              <path
+        <div className="relative pb-2 pt-6">
+          <div className="pointer-events-none absolute left-0 right-0 top-8 hidden h-10 opacity-50 md:block">
+            <svg className="h-full w-full" viewBox="0 0 1000 40" fill="none" preserveAspectRatio="none" aria-hidden="true">
+              <motion.path
                 d="M 50,20 Q 250,5 450,22 T 850,18 T 980,24"
                 stroke="#a3a3a3"
                 strokeWidth="1"
                 strokeDasharray="2 3"
+                initial={prefersReducedMotion ? false : { pathLength: 0, opacity: 0 }}
+                whileInView={prefersReducedMotion ? undefined : { pathLength: 1, opacity: 1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 1.25, ease: fluidEase }}
               />
             </svg>
           </div>
 
-          {/* 4 Steps Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 relative z-10">
-            {steps.map((step) => (
-              <div key={step.number} className="flex flex-col group">
-                {/* Node point */}
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-black ring-4 ring-[#faf9f7] shadow-xs group-hover:scale-125 transition-transform" />
+          <div className="relative z-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.number}
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.65, delay: prefersReducedMotion ? 0 : index * 0.08, ease: fluidEase }}
+                className="group flex flex-col"
+              >
+                <div className="mb-5 flex items-center gap-3">
+                  <motion.div
+                    className="h-2.5 w-2.5 rounded-full bg-black ring-4 ring-[#faf9f7] shadow-xs"
+                    whileHover={prefersReducedMotion ? undefined : { scale: 1.3 }}
+                    transition={{ duration: 0.25, ease: fluidEase }}
+                  />
                   <span className="font-mono text-xs tracking-wider text-neutral-400">
                     {step.number}
                   </span>
                 </div>
 
-                <h3 className="text-lg md:text-xl font-medium text-neutral-900 mb-2">
+                <h3 className="mb-2 text-lg font-medium text-neutral-900 md:text-xl">
                   {step.title}
                 </h3>
-                <p className="text-xs md:text-sm text-neutral-600 font-light leading-relaxed">
+                <p className="text-xs font-light leading-relaxed text-neutral-600 md:text-sm">
                   {step.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
